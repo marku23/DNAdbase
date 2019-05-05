@@ -1,3 +1,5 @@
+import java.io.RandomAccessFile;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -26,10 +28,31 @@
  * @version 5/4/19
  *
  */
+
+import java.io.*;
+
 public class DNAdbase {
 
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
+    /**
+     * The main method for the program
+     * @param args - arguments from command line
+     * @throws IOException if any of the files could not be found
+     */
+    public static void main(String[] args) throws IOException {
+        if (args.length < 4) {
+            throw new IllegalArgumentException(
+                "Please specify the program arguments. " +
+                "Invoke as: <command-file> <hash-file> <hash-table-size>\r\n" + 
+                "<memory-file>");
+        }
+        else {
+            File inputFile = new File(args[0], "r");
+            RandomAccessFile hashFile = new RandomAccessFile(args[1], "rw");
+            int tableSize = Integer.parseInt(args[2]);
+            RandomAccessFile memoryFile = new RandomAccessFile(args[3], "rw");
+            FileReader reader = new FileReader(inputFile, hashFile, memoryFile);
+            reader.processInput();
+        }
 
     }
 
