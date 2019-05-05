@@ -1,7 +1,9 @@
+
 /**
  * A java class that reads in commands from the input file and
  * calls methods to process them accordingly by using the hash
  * file and the memory file.
+ * 
  * @author marku23
  * @author ccox17
  *
@@ -16,28 +18,38 @@ public class FileReader {
     private File input;
     private RandomAccessFile hash;
     private RandomAccessFile memory;
-    
+
+
     /**
      * The default constructor for this file reader object
-     * @param inputFile - the file we are reading input from
-     * @param hashFile - the file we are hashing to
-     * @param memoryFile - the file we are storing sequences in
-     * @throws FileNotFoundException - if one of the files could not be found
+     * 
+     * @param inputFile
+     *            - the file we are reading input from
+     * @param hashFile
+     *            - the file we are hashing to
+     * @param memoryFile
+     *            - the file we are storing sequences in
+     * @throws FileNotFoundException
+     *             - if one of the files could not be found
      */
-    public FileReader(File inputFile, RandomAccessFile hashFile, RandomAccessFile memoryFile) throws FileNotFoundException {
+    public FileReader(
+        File inputFile,
+        RandomAccessFile hashFile,
+        RandomAccessFile memoryFile)
+        throws FileNotFoundException {
         input = inputFile;
         hash = hashFile;
         memory = memoryFile;
         reader = new Scanner(input);
-        processor = new DataProcessor(hash, memory);
+        processor = new DataProcessor(memory);
     }
-    
+
+
     /**
      * Reads through the input file and calls methods to process
      * the commands accordingly
      */
-    public void processInput()
-    {
+    public void processInput() {
         while (reader.hasNext()) {
             String temp = reader.nextLine().trim();
             String[] commands = temp.split(" \t\n");
@@ -58,11 +70,10 @@ public class FileReader {
                 String ID = commands[1];
                 processor.search(ID);
             }
-            else
-            {
+            else {
                 System.out.println("Command not recognized");
             }
         }
-        
+
     }
 }
