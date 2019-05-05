@@ -2,7 +2,6 @@
 public class DNAHashTable implements HashTable<DNARecord> {
     // Variables...............................................................
     public static final int bucketSize = 32;
-    private MemoryManager mem;
     private DNARecord[] table;
     private int numBuckets;
 
@@ -17,7 +16,6 @@ public class DNAHashTable implements HashTable<DNARecord> {
      */
 
     public DNAHashTable(int size) {
-        mem = new MemoryManager();
         table = new DNARecord[size];
         numBuckets = size / bucketSize;
     }
@@ -27,7 +25,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
     
     
     @Override
-    public boolean insert(DNARecord entry) {
+    public boolean insert(String key, DNARecord value) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -45,5 +43,28 @@ public class DNAHashTable implements HashTable<DNARecord> {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    long sfold(String s, int M) {
+        int intLength = s.length() / 4;
+        long sum = 0;
+        for (int j = 0; j < intLength; j++) {
+          char c[] = s.substring(j * 4, (j * 4) + 4).toCharArray();
+          long mult = 1;
+          for (int k = 0; k < c.length; k++) {
+            sum += c[k] * mult;
+            mult *= 256;
+          }
+        }
+
+        char c[] = s.substring(intLength * 4).toCharArray();
+        long mult = 1;
+        for (int k = 0; k < c.length; k++) {
+          sum += c[k] * mult;
+          mult *= 256;
+        }
+
+        sum = (sum * sum) >> 8;
+        return(Math.abs(sum) % M);
+      }
 
 }

@@ -13,13 +13,15 @@ public interface HashTable<T> {
     /**
      * Attempts to insert a value into the hash table.
      * 
-     * @param entry
-     *            The entry to be inserted.
+     * @param key
+     *            The key for the entry to be inserted.
+     * @param value
+     *            The value to be inserted.
      * @return
      *         True if insertion was successful, false otherwise.
      */
 
-    public boolean insert(T entry);
+    public boolean insert(String key, T value);
 
 
     /**

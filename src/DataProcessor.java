@@ -14,7 +14,8 @@ import java.io.*;
 public class DataProcessor {
 
     private RandomAccessFile memory;
-
+    private DNAHashTable table;
+    private MemoryManager manager;
 
     /**
      * Default constructor
@@ -25,8 +26,9 @@ public class DataProcessor {
      *            - the memory file
      */
     public DataProcessor(
-        RandomAccessFile memoryFile) {
+        RandomAccessFile memoryFile, DNAHashTable table) {
         memory = memoryFile;
+        manager = new MemoryManager();
     }
 
 
