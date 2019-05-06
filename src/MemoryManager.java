@@ -38,4 +38,8 @@ public class MemoryManager {
         //update freeBlocks list
         return true;
     }
+    
+    public String getID(DNARecord object) {
+        
+    }
 }

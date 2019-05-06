@@ -30,10 +30,10 @@ public interface HashTable<T> {
      * @param key
      *            the key to search for the value by.
      * @return
-     *         true if removal was successful, false otherwise.
+     *         The location that the key would be located at
      */
 
-    public boolean remove(String key);
+    public int remove(String key);
 
 
     /**
@@ -42,10 +42,10 @@ public interface HashTable<T> {
      * @param key
      *            specifies what to search for
      * @return
-     *         the requested item if it is in the table, or null otherwise.
+     *         The location that the key would occupy
      */
 
-    public T search(String key);
+    public int search(String key);
 
 
     /**

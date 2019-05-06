@@ -4,6 +4,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public static final int bucketSize = 32;
     private DNARecord[] table;
     private int numBuckets;
+    private int numChars;
 
 
     // Constructors............................................................
@@ -18,6 +19,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public DNAHashTable(int size) {
         table = new DNARecord[size];
         numBuckets = size / bucketSize;
+        numChars = 0;
     }
 
 
@@ -43,29 +45,22 @@ public class DNAHashTable implements HashTable<DNARecord> {
             {
                 table[i] = value;
                 inserted = true;
+                numChars += key.length();
             }
         }
         return inserted;
     }
 
     /**
-     * Removes a DNARecord object with the given key from this hash
-     * table, if it is stored in the hash table in the first place
+     * Returns the location that the key would be hashed to so that
+     * the remove can take place in DataProcessor
      * @param key - the ID of the DNARecord we are searching for
-     * @return true if the object was removed; false otherwise
+     * @return the index that key would hash to 
      */
     @Override
-    public boolean remove(String key) {
-        boolean removed = false;
-        long destination = sfold(key, table.length);
-        int bucketStart = ((int)destination / bucketSize) * bucketSize;
-        for (int i = bucketStart; i < bucketStart + bucketSize; i++)
-        {
-            if (//the String of that DNARecord matches the key) {
-            {
-                table[i].setIDLength(-1);
-            }
-        }
+    public int remove(String key) {
+        //decrement numChars somehow
+        return (int)sfold(key, bucketSize * numBuckets);
     }
 
     /**
@@ -76,17 +71,8 @@ public class DNAHashTable implements HashTable<DNARecord> {
      * one did not exist in the table
      */
     @Override
-    public DNARecord search(String key) {
-        long destination = sfold(key, table.length);
-        int bucketStart = ((int)destination / bucketSize) * bucketSize;
-        for (int i = bucketStart; i < bucketStart + bucketSize; i++)
-        {
-            if (//the String of that DNARecord matches the key) {
-            {
-                return table[i];
-            }
-        }
-        return null;
+    public int search(String key) {
+        return (int)sfold(key, table.length);
     }
     
     /**
