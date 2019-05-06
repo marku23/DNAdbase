@@ -51,7 +51,7 @@ public class DNAdbase {
             RandomAccessFile hashFile = new RandomAccessFile(args[1], "rw");
             int tableSize = Integer.parseInt(args[2]);
             RandomAccessFile memoryFile = new RandomAccessFile(args[3], "rw");
-            FileReader reader = new FileReader(inputFile, hashFile, memoryFile);
+            FileReader reader = new FileReader(inputFile, hashFile, memoryFile, tableSize);
             reader.processInput();
         }
 

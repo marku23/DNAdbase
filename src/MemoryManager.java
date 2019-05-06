@@ -1,3 +1,4 @@
+import java.io.RandomAccessFile;
 import java.util.LinkedList;
 
 /**
@@ -9,25 +10,34 @@ import java.util.LinkedList;
 
 public class MemoryManager {
     // Variables...............................................................
-    private LinkedList<FreeBlock> blocks;
-    private LinkedList<String> duplicates;
+    //private LinkedList
+    private LinkedList<String> duplicateList;
+    private LinkedList<FreeBlock> freeBlocks; //should this be int?
+    private RandomAccessFile binFile;
     
-    // Constructors............................................................
-    
-    /**
-     * Creates a new MemoryManager object.  
-     */
-    
-    public MemoryManager() {
-        blocks = new LinkedList<FreeBlock>();
-        duplicates = new LinkedList<String>();
+    public MemoryManager(RandomAccessFile binFile)
+    {
+        duplicateList = new LinkedList<String>();
+        freeBlocks = new LinkedList<FreeBlock>();
+        this.binFile = binFile;
     }
     
-    // Variables...............................................................
+    public DNARecord insert(String ID, String sequence)
+    {
+        for (int i = 0; i < duplicateList.size(); i++)
+        {
+            if (ID.equals(duplicateList.get(i)))
+            {
+                return null;
+            }
+        }
+        duplicateList.add(ID);
+        //add data to bin file
+        //update freeBlocks list
+        return true;
+    }
     
-    public DNARecord insert(String Sequence, String SequenceID) {
-        int seqLength = Sequence.length();
-        int IDLength = SequenceID.length();
-        int memSize = seqLength + IDLength;
+    public String getID(DNARecord object) {
+        
     }
 }

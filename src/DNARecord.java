@@ -70,6 +70,16 @@ public class DNARecord {
         return IDLength;
     }
     
+    /**
+     * Changes the IDLength of this DNARecord. This is used for setting 
+     * our condition for a tombstone: if the ID length is negative, then this
+     * is a tombstone.
+     * @param newLength - the new length of the ID of this sequence
+     */
+    public void setIDLength(int newLength)
+    {
+        IDLength = newLength;
+    }
     
     /**
      * getter method. 
