@@ -35,13 +35,13 @@ public class FileReader {
     public FileReader(
         File inputFile,
         RandomAccessFile hashFile,
-        RandomAccessFile memoryFile)
+        RandomAccessFile memoryFile, int tableSize)
         throws FileNotFoundException {
         input = inputFile;
         hash = hashFile;
         memory = memoryFile;
         reader = new Scanner(input);
-        processor = new DataProcessor(memory);
+        processor = new DataProcessor(memory, new DNAHashTable(tableSize));
     }
 
 

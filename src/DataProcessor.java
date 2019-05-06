@@ -29,6 +29,7 @@ public class DataProcessor {
         RandomAccessFile memoryFile, DNAHashTable table) {
         memory = memoryFile;
         manager = new MemoryManager();
+        this.table = table;
     }
 
 
@@ -44,7 +45,10 @@ public class DataProcessor {
      *            - the length of the sequence
      */
     public void insert(String ID, String seq, int length) {
-        // do things
+        DNARecord thisRecord = new DNARecord(WHAT, ID.length(), WHAT, length);
+        if (manager.insert(ID, thisRecord)) {//i'm assuming it will return true if it gets inserted
+            table.insert(ID, thisRecord);
+        }
     }
 
 
