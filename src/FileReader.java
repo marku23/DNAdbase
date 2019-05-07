@@ -56,9 +56,8 @@ public class FileReader {
             String[] commands = temp.split(" \t\n");
             if (commands[0].equals("insert")) {
                 String ID = commands[1];
-                int seqLength = Integer.parseInt(commands[2]);
                 String seq = reader.nextLine();
-                processor.insert(ID, seq, seqLength);
+                processor.insert(ID, seq);
             }
             else if (commands[0].equals("remove")) {
                 String ID = commands[1];

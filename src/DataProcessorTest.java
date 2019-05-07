@@ -38,9 +38,9 @@ public class DataProcessorTest extends student.TestCase {
      * Tests the insert method to ensure that it inserts to 
      * both the hash table and the memory manager as intended
      * and that the output is correct
-     * @throws FileNotFoundException if the binFile was not found
+     * @throws IOException if the file was not found
      */
-    public void testInsert() throws FileNotFoundException
+    public void testInsert() throws IOException
     {
         setUp();
         processor.insert("AAAA", "ACGTACGT");
