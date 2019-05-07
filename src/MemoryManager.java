@@ -136,18 +136,60 @@ public class MemoryManager {
         FreeBlock idBlock = new FreeBlock(record.getIDOffset(), idSize);
         FreeBlock seqBlock = new FreeBlock(record.getSeqOffset(), seqSize);
         if (!freeBlocks.isEmpty()) {
-            FreeBlock left = freeBlocks.getFirst();
-            FreeBlock right = freeBlocks.getLast();
+            FreeBlock idLeft = freeBlocks.getFirst();
+            FreeBlock idRight = freeBlocks.getLast();
+            FreeBlock seqLeft = freeBlocks.getFirst();
+            FreeBlock seqRight = freeBlocks.getLast();
             for (int i = 0; i < freeBlocks.size(); i++) {
                 if (freeBlocks.get(i).compareTo(idBlock) < 0) {
-                    left = freeBlocks.get(i);
+                    idLeft = freeBlocks.get(i);
+                }
+                if (freeBlocks.get(i).compareTo(seqBlock) < 0) {
+                    seqLeft = freeBlocks.get(i);
                 }
             }
             for (int j = freeBlocks.size() - 1; j > 0; j--) {
                 if (freeBlocks.get(j).compareTo(idBlock) > 0) {
-                    right = freeBlocks.get(j);
+                    idRight = freeBlocks.get(j);
+                }
+                if (freeBlocks.get(j).compareTo(seqBlock) > 0) {
+                    seqRight = freeBlocks.get(j);
                 }
             }
+            int idLeftEnd = idLeft.getEnd();
+            int idEnd = idBlock.getEnd();
+            int seqLeftEnd = seqLeft.getEnd();
+            int seqEnd = seqBlock.getEnd();
+            if (idLeftEnd == idBlock.getOffset()) {
+                idBlock = combine(idLeft, idBlock);
+            }
+            else {
+                freeBlocks.add(idBlock);
+            }
+            if (idEnd == seqBlock.getOffset()) {
+                idBlock = combine(idBlock, seqBlock);
+                if (seqEnd == seqRight.getOffset()) {
+                    idBlock = combine(idBlock, seqRight);
+                    freeBlocks.remove(seqRight);
+                }
+            }
+            else {
+                if (idEnd == idRight.getOffset()) {
+                    idBlock = combine(idBlock, idRight);
+                    freeBlocks.remove(idRight);
+                }
+                if (seqLeftEnd == seqBlock.getOffset()) {
+                    seqBlock = combine(seqLeft, seqBlock);
+                }
+                else {
+                    freeBlocks.add(seqBlock);
+                }
+                if (seqEnd == seqRight.getOffset()) {
+                    seqBlock = combine(seqBlock, seqRight);
+                    freeBlocks.remove(seqRight);
+                }
+            }
+            /*
             int leftEnd = left.getOffset() + left.getSize();
             int idEnd = idBlock.getOffset() + idBlock.getSize();
             if (leftEnd == idBlock.getOffset() && idEnd == right.getOffset()) {
@@ -163,6 +205,7 @@ public class MemoryManager {
             else {
                 freeBlocks.add(idBlock);
             }
+            
             Collections.sort(freeBlocks);
             left = freeBlocks.getFirst();
             right = freeBlocks.getLast();
@@ -192,6 +235,7 @@ public class MemoryManager {
             else {
                 freeBlocks.add(seqBlock);
             }
+            */
         }
         else {
             freeBlocks.add(idBlock);
@@ -200,17 +244,16 @@ public class MemoryManager {
                 idBlock = combine(idBlock, seqBlock);
             }
         }
-        int idEnd = idBlock.getOffset() + idBlock.getSize();
-        int seqEnd = seqBlock.getOffset() + seqBlock.getSize();
+        int idEnd = idBlock.getEnd();
+        int seqEnd = seqBlock.getEnd();
         if (idEnd == (int)binFile.length()) {
-            binFile.setLength(binFile.length() - idEnd);
+            binFile.setLength(binFile.length() - idBlock.getSize());
             freeBlocks.remove(idBlock);
         }
         else if (seqEnd == (int)binFile.length()) {
-            binFile.setLength(binFile.length() - seqEnd);
+            binFile.setLength(binFile.length() - seqBlock.getSize());
             freeBlocks.remove(seqBlock);
         }
-
         Collections.sort(freeBlocks);
         return sequence;
     }
@@ -273,5 +316,11 @@ public class MemoryManager {
 
     public LinkedList<FreeBlock> getFreeBlocks() {
         return freeBlocks;
+    }
+    
+    public void clear() throws IOException {
+        binFile.setLength(0);
+        duplicateList.clear();
+        freeBlocks.clear();
     }
 }
