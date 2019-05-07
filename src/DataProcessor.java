@@ -10,6 +10,7 @@
  */
 
 import java.io.*;
+import java.util.LinkedList;
 
 public class DataProcessor {
 
@@ -103,6 +104,17 @@ public class DataProcessor {
                 byte[] thisID = manager.getID(thisRecord);
                 System.out.println(
                         binaryToDNA(thisID, thisRecord.getIDLength())  + ": hash slot [" + i + "]");
+            }
+        }
+        System.out.print("Free Block List:");
+        LinkedList<FreeBlock> blocks = manager.getFreeBlocks();
+        if (blocks.isEmpty()) {
+            System.out.println(" none");
+        }
+        else {
+            System.out.println("");
+            for (int i = 0; i < blocks.size(); i++) {
+                System.out.println("[Block " + i + "] " + blocks.get(i).toString());
             }
         }
     }

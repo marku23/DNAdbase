@@ -79,7 +79,6 @@ public class FreeBlock implements Comparable<FreeBlock> {
 
 
     public String toString() {
-        return "Offset: " + offset + " Size in characters: " + size * 4
-            + " Size in bytes: " + size;
+        return "Starting Byte Location: " + offset + ", Size " + size + " bytes";
     }
 }

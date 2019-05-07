@@ -29,18 +29,18 @@ public class FileReader {
      *            - the file we are hashing to
      * @param memoryFile
      *            - the file we are storing sequences in
-     * @throws FileNotFoundException
-     *             - if one of the files could not be found
+     * @throws IOException 
      */
     public FileReader(
         String inputFile,
         String hashFile,
         String memoryFile,
         int tableSize)
-        throws FileNotFoundException {
+        throws IOException {
         input = new File(inputFile);
         hash = new RandomAccessFile(hashFile, "rw");
         memory = new RandomAccessFile(memoryFile, "rw");
+        memory.setLength(0);
         reader = new Scanner(input);
         processor = new DataProcessor(memory, new DNAHashTable(tableSize));
     }
