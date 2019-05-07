@@ -47,6 +47,8 @@ public class DataProcessorTest extends student.TestCase {
         processor.insert("AAAA", "ACGTACGT");
         String output = outContent.toString();
         String[] parsedOutput = output.split("\n");
+        String test1 = "Sequence AAAA exists";
+        assertEquals(test1, parsedOutput[0].trim());
     }
     
     /**

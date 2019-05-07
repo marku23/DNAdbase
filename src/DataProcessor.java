@@ -38,8 +38,9 @@ public class DataProcessor {
      *            - the ID of the sequence
      * @param seq
      *            - the sequence
+     * @throws IOException if the file was not found
      */
-    public void insert(String ID, String seq) {
+    public void insert(String ID, String seq) throws IOException {
         DNARecord thisRecord = manager.insert(ID, seq);
         if (thisRecord == null) {
             System.out.println("SequenceID " + ID + " exists");
@@ -93,9 +94,9 @@ public class DataProcessor {
         for (int i = 0; i < table.getTable().length; i++) {
             if (table.getTable()[i] != null) {
                 DNARecord thisRecord = table.getTable()[i];
-                String thisID = manager.getID(thisRecord);
+                byte[] thisID = manager.getID(thisRecord);
                 System.out.println(
-                        thisID + ": hash slot [" + search(thisID) + "]");
+                        thisID + ": hash slot [" + search(binaryToDNA(thisID, thisRecord.getSeqLength())) + "]");
             }
         }
     }
