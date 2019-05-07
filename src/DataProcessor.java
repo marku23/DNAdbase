@@ -77,7 +77,7 @@ public class DataProcessor {
         }
 
         if (found) {
-            manager.remove(target);
+            manager.remove(target, ID);
             System.out.println("Sequence removed " + ID + ":");
             System.out.println(manager.getSequence(target));
         }

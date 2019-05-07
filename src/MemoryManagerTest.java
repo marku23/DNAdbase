@@ -68,7 +68,15 @@ public class MemoryManagerTest extends student.TestCase {
         assertEquals(manager.getSequence(record3)[2], bytes3[2]);
         assertTrue(duplicates.contains("GGG"));
 
-        // After a removal
+        // After a removal from the front, multiple entries
+
+        record = manager.insert("AAAA", "AAAA");
+        manager.insert("CCCC", "CCCC");
+        manager.remove(record, "AAAAA");
+        duplicates = manager.getDuplicates();
+        assertEquals(manager.getID(record)[0], bytes[0]);
+        assertEquals(manager.getSequence(record)[0], bytes[0]);
+        assertTrue(duplicates.contains("AAAA"));
     }
 
 
