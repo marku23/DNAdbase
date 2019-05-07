@@ -148,7 +148,7 @@ public class MemoryManager {
                     seqLeft = freeBlocks.get(i);
                 }
             }
-            for (int j = freeBlocks.size() - 1; j > 0; j--) {
+            for (int j = freeBlocks.size() - 1; j >= 0; j--) {
                 if (freeBlocks.get(j).compareTo(idBlock) > 0) {
                     idRight = freeBlocks.get(j);
                 }
@@ -176,6 +176,9 @@ public class MemoryManager {
             else {
                 if (idEnd == idRight.getOffset()) {
                     idBlock = combine(idBlock, idRight);
+                    if (idRight == seqLeft) {
+                        seqLeft = idBlock;
+                    }
                     freeBlocks.remove(idRight);
                 }
                 if (seqLeftEnd == seqBlock.getOffset()) {
@@ -240,9 +243,7 @@ public class MemoryManager {
         else {
             freeBlocks.add(idBlock);
             int idEnd = idBlock.getOffset() + idBlock.getSize();
-            if (idEnd == seqBlock.getOffset()) {
-                idBlock = combine(idBlock, seqBlock);
-            }
+            idBlock = combine(idBlock, seqBlock);
         }
         int idEnd = idBlock.getEnd();
         int seqEnd = seqBlock.getEnd();

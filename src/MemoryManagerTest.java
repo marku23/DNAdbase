@@ -125,6 +125,7 @@ public class MemoryManagerTest extends student.TestCase {
         DNARecord record3;
         DNARecord record4;
         DNARecord record5;
+        DNARecord record6;
         LinkedList<String> duplicates;
         LinkedList<FreeBlock> blocks;
         // only entry (hence, from end)
@@ -193,24 +194,25 @@ public class MemoryManagerTest extends student.TestCase {
         assertEquals(blocks.size(), 1);
         assertFalse(duplicates.contains("CCCC"));
         assertTrue(duplicates.contains("GGGG"));
-        
+
         record2 = manager.insert("CCCC", "CCCC");
-        
+
         // 3 entries, end
         byte[] seq3 = manager.remove(record3, "GGGG");
         byte[] bytes3 = { -86 };
         assertEquals(seq3[0], bytes3[0]);
         blocks = manager.getFreeBlocks();
         assertTrue(blocks.isEmpty());
-        
-        // reset to test with 5 entries, in order to test merging with blocks in the list
+
+        // reset to test with 5 entries, in order to test merging with blocks in
+        // the list
         manager.clear();
         record = manager.insert("AAAA", "AAAA");
         record2 = manager.insert("CCCC", "CCCC");
         record3 = manager.insert("GGGG", "GGGG");
         record4 = manager.insert("TTTT", "TTTT");
         record5 = manager.insert("ACGT", "ACGT");
-        
+
         // Merging to left
         manager.remove(record2, "CCCC");
         manager.remove(record3, "GGGG");
@@ -219,10 +221,10 @@ public class MemoryManagerTest extends student.TestCase {
         block = blocks.getFirst();
         assertEquals(block.getOffset(), 2);
         assertEquals(block.getSize(), 4);
-        
+
         record2 = manager.insert("CCCC", "CCCC");
         record3 = manager.insert("GGGG", "GGGG");
-        
+
         // Merging to right
         manager.remove(record3, "GGGG");
         manager.remove(record4, "TTTT");
@@ -231,10 +233,10 @@ public class MemoryManagerTest extends student.TestCase {
         block = blocks.getFirst();
         assertEquals(block.getOffset(), 4);
         assertEquals(block.getSize(), 4);
-        
+
         record3 = manager.insert("GGGG", "GGGG");
         record4 = manager.insert("TTTT", "TTTT");
-        
+
         // Merging both ways
         manager.remove(record2, "CCCC");
         manager.remove(record4, "TTTT");
@@ -250,21 +252,139 @@ public class MemoryManagerTest extends student.TestCase {
         blocks = manager.getFreeBlocks();
         assertEquals(blocks.size(), 1);
         block = blocks.getFirst();
-        
-        // Clearing to test when merging and ID and Sequence are not next to each other
+
+        // Clearing to test when merging and ID and Sequence are not next to
+        // each other
         manager.clear();
         record = manager.insert("AAAA", "AAAA");
         record2 = manager.insert("CCCC", "CCCC");
         record3 = manager.insert("GGGG", "GGGG");
         record4 = manager.insert("TTTT", "TTTT");
         record5 = manager.insert("ACGT", "ACGT");
+        record6 = manager.insert("AACC", "AACC");
+
+        // Test merging ID left
+        manager.remove(record2, "CCCC");
+        manager.remove(record4, "TTTT");
+        record2 = manager.insert("CCCC", "CCCCCCCC");
         manager.remove(record, "AAAA");
-        manager.remove(record, "TTTT");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 2);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 0);
+        assertEquals(block.getSize(), 2);
+        block = blocks.getLast();
+        assertEquals(block.getOffset(), 3);
+        assertEquals(block.getSize(), 1);
+        manager.remove(record2, "CCCC");
+        assertEquals(blocks.size(), 2);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 0);
+        assertEquals(block.getSize(), 4);
+        block = blocks.getLast();
+        assertEquals(block.getOffset(), 6);
+        assertEquals(block.getSize(), 2);
+
+        // clear
+        manager.clear();
+        record = manager.insert("AAAA", "AAAA");
+        record2 = manager.insert("CCCC", "CCCC");
+        record3 = manager.insert("GGGG", "GGGG");
+        record4 = manager.insert("TTTT", "TTTT");
+        record5 = manager.insert("ACGT", "ACGT");
+        record6 = manager.insert("AACC", "AACC");
+
+        // Test merging ID Right
+        manager.remove(record, "AAAA");
+        manager.remove(record4, "TTTT");
         record = manager.insert("AAAA", "AAAAAAAA");
+        manager.remove(record2, "CCCC");
         blocks = manager.getFreeBlocks();
         assertEquals(blocks.size(), 1);
         block = blocks.getFirst();
         assertEquals(block.getOffset(), 1);
+        assertEquals(block.getSize(), 3);
+        manager.remove(record, "AAAA");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 2);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 0);
+        assertEquals(block.getSize(), 4);
+
+        // clear
+        manager.clear();
+        record = manager.insert("AAAA", "AAAA");
+        record2 = manager.insert("CCCC", "CCCC");
+        record3 = manager.insert("GGGG", "GGGG");
+        record4 = manager.insert("TTTT", "TTTT");
+        record5 = manager.insert("ACGT", "ACGT");
+        record6 = manager.insert("AACC", "AACC");
+
+        // test merging ID right into Sequence
+        manager.remove(record, "AAAA");
+        manager.remove(record3, "GGGG");
+        record = manager.insert("AAAA", "AAAAAAAA");
+        manager.remove(record2, "CCCC");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 1);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 1);
+        assertEquals(block.getSize(), 3);
+        manager.remove(record, "AAAA");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 1);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 0);
+        assertEquals(block.getSize(), 6);
+
+        // clear
+        manager.clear();
+        record = manager.insert("AAAA", "AAAA");
+        record2 = manager.insert("CCCC", "CCCC");
+        record3 = manager.insert("GGGG", "GGGG");
+        record4 = manager.insert("TTTT", "TTTT");
+        record5 = manager.insert("ACGT", "ACGT");
+        record6 = manager.insert("AACC", "AACC");
+        
+        // Test sequence left
+        manager.remove(record, "AAAA");
+        manager.remove(record4, "TTTT");
+        record = manager.insert("AAAA", "AAAAAAAA");
+        manager.remove(record3, "GGGG");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 2);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 1);
         assertEquals(block.getSize(), 1);
+        manager.remove(record, "AAAA");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 2);
+        block = blocks.getLast();
+        assertEquals(block.getOffset(), 4);
+        assertEquals(block.getSize(), 4);
+        
+        // clear
+        manager.clear();
+        record = manager.insert("AAAA", "AAAA");
+        record2 = manager.insert("CCCC", "CCCC");
+        record3 = manager.insert("GGGG", "GGGG");
+        record4 = manager.insert("TTTT", "TTTT");
+        record5 = manager.insert("ACGT", "ACGT");
+        record6 = manager.insert("AACC", "AACC");
+        
+        // Test sequence right
+        manager.remove(record, "AAAA");
+        manager.remove(record4, "TTTT");
+        record4 = manager.insert("AAAA", "AAAAAAAA");
+        manager.insert("AAGG", "AAGGAAGG");
+        blocks = manager.getFreeBlocks();
+        assertTrue(blocks.isEmpty());
+        manager.remove(record5, "ACGT");
+        manager.remove(record4, "AAAA");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 2);
+        block = blocks.getLast();
+        assertEquals(block.getOffset(), 6);
+        assertEquals(block.getSize(), 4);
     }
 }
