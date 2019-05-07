@@ -250,5 +250,21 @@ public class MemoryManagerTest extends student.TestCase {
         blocks = manager.getFreeBlocks();
         assertEquals(blocks.size(), 1);
         block = blocks.getFirst();
+        
+        // Clearing to test when merging and ID and Sequence are not next to each other
+        manager.clear();
+        record = manager.insert("AAAA", "AAAA");
+        record2 = manager.insert("CCCC", "CCCC");
+        record3 = manager.insert("GGGG", "GGGG");
+        record4 = manager.insert("TTTT", "TTTT");
+        record5 = manager.insert("ACGT", "ACGT");
+        manager.remove(record, "AAAA");
+        manager.remove(record, "TTTT");
+        record = manager.insert("AAAA", "AAAAAAAA");
+        blocks = manager.getFreeBlocks();
+        assertEquals(blocks.size(), 1);
+        block = blocks.getFirst();
+        assertEquals(block.getOffset(), 1);
+        assertEquals(block.getSize(), 1);
     }
 }
