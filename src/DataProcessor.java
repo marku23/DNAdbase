@@ -63,24 +63,29 @@ public class DataProcessor {
      */
     public void remove(String ID) throws IOException {
         boolean found = false;
-        int destination = table.remove(ID);
-        DNARecord target = null;
+        int destination = table.search(ID);
+        DNARecord thisRecord = table.getHandleAtOffset(destination);
         int bucketStart = (destination / DNAHashTable.bucketSize)
                 * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
-            DNARecord thisRecord = table.getTable()[i];
-            if (ID.getBytes().equals(manager.getID(thisRecord))) {
-                table.getTable()[i].setIDLength(-1);
+            thisRecord = table.getHandleAtOffset(i);
+            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
                 found = true;
-                target = thisRecord;
+                destination = i;
+                break;
             }
         }
 
         if (found) {
-            manager.remove(target, ID);
+            byte[] sequence = manager.remove(thisRecord, ID);
+            table.makeTombstone(destination);
             System.out.println("Sequence removed " + ID + ":");
-            System.out.println(manager.getSequence(target));
+            System.out.println(binaryToDNA(sequence, thisRecord.getSeqLength()));
+        }
+        else
+        {
+            System.out.println("SequenceID " + ID + " not found");
         }
     }
 
