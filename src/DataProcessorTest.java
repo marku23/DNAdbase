@@ -77,10 +77,39 @@ public class DataProcessorTest extends student.TestCase {
     /**
      * Tests the search method to ensure it searches properly
      * and the output is correct
+     * @throws IOException 
      */
-    public void testSearch()
+    public void testSearch() throws IOException
     {
-        
+        processor.search("AAAA");
+        String output = outContent.toString();
+        String[] parsedOutput = output.split("\n");
+        String test1 = "SequenceID AAAA not found";
+        assertEquals(test1, parsedOutput[0].trim());
+        processor.insert("AAAA", "ACGTACGT");
+        processor.search("AAAA");
+        output = outContent.toString();
+        parsedOutput = output.split("\n");
+        String test2 = "Sequence found: ACGTACGT";
+        assertEquals(test2, parsedOutput[1].trim());
+    }
+    
+    /**
+     * Tests the print method to ensure that it prints out 
+     * all entries in the table as expected
+     * @throws IOException if the file was not found
+     */
+    public void testPrint() throws IOException
+    {
+        processor.print();
+        String output = outContent.toString();
+        String[] parsedOutput = output.split("\n");
+        assertEquals("Sequence IDs:", parsedOutput[0].trim());
+        processor.insert("AAAA", "ACGTACGT");
+        processor.print();
+        output = outContent.toString();
+        parsedOutput = output.split("\n");
+        assertEquals("AAAA: hash slot [18]", parsedOutput[2].trim());
     }
     
     /**

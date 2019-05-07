@@ -102,7 +102,7 @@ public class DataProcessor {
                 DNARecord thisRecord = table.getTable()[i];
                 byte[] thisID = manager.getID(thisRecord);
                 System.out.println(
-                        thisID + ": hash slot [" + search(binaryToDNA(thisID, thisRecord.getSeqLength())) + "]");
+                        binaryToDNA(thisID, thisRecord.getIDLength())  + ": hash slot [" + i + "]");
             }
         }
     }
@@ -115,26 +115,24 @@ public class DataProcessor {
      * @throws IOException
      *             if the memory file was not found
      */
-    public int search(String ID) throws IOException {
+    public void search(String ID) throws IOException {
         int destination = table.search(ID);
         boolean found = false;
-        int foundIndex = -1;
         int bucketStart = ((int) destination / DNAHashTable.bucketSize)
                 * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
             DNARecord thisRecord = table.getTable()[i];
-            if (ID.getBytes().equals(manager.getID(thisRecord))) {
+            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
                 System.out.print("Sequence found: ");
-                System.out.println(manager.getSequence(thisRecord));
+                System.out.println(binaryToDNA(manager.getSequence(thisRecord), thisRecord.getSeqLength()));
                 found = true;
-                foundIndex = i;
+                break;
             }
         }
         if (!found) {
-            System.out.println("Sequence not found");
+            System.out.println("SequenceID " + ID + " not found");
         }
-        return foundIndex;
     }
 
     /**

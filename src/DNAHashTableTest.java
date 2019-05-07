@@ -42,8 +42,7 @@ public class DNAHashTableTest extends student.TestCase {
         DNARecord temp = new DNARecord(0, 8, 8, 8);
         table.insert("AAAAAAAA", temp);
         assertNotNull(table.getTable()[74]);
-        table.remove("AAAAAAAA");
-        assertNull(table.getTable()[74]);
+        assertEquals(74, table.remove("AAAAAAAA"));
     }
     
     /**
@@ -54,17 +53,20 @@ public class DNAHashTableTest extends student.TestCase {
     {
         DNARecord temp = new DNARecord(0, 8, 8, 8);
         table.insert("AAAAAAAA", temp);
-        assertEquals(temp, table.search("AAAAAAAA"));
-        assertNull(table.search("i wanna fuckin drop out lol"));
+        assertEquals(74, table.search("AAAAAAAA"));
+        assertEquals(17, table.search("C"));
     }
     
     /**
      * Tests the print method to make sure it prints sequences
      * as intended
      */
-    public void testPrint()
+    public void testMakeTombstone()
     {
-        
+        DNARecord temp = new DNARecord(0, 8, 8, 8);
+        table.insert("AAAAAAAA", temp);
+        table.makeTombstone(74);
+        assertEquals(-1, table.getHandleAtOffset(74).getIDLength());
     }
     
     /**
@@ -76,4 +78,15 @@ public class DNAHashTableTest extends student.TestCase {
         assertNotNull(table.getTable());
     }
 
+    /**
+     * Tests the getHandleAtOffset method to ensure it returns the
+     * proper DNARecord object at a certain offset
+     */
+    public void testGetHandleAtOffset()
+    {
+        DNARecord temp = new DNARecord(0, 8, 8, 8);
+        table.insert("AAAAAAAA", temp);
+        table.getHandleAtOffset(74);
+        assertEquals(temp, table.getHandleAtOffset(74));   
+    }
 }
