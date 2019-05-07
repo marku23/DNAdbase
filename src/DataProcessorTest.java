@@ -47,17 +47,29 @@ public class DataProcessorTest extends student.TestCase {
         processor.insert("AAAA", "ACGTACGT");
         String output = outContent.toString();
         String[] parsedOutput = output.split("\n");
-        String test1 = "Sequence AAAA exists";
+        String test1 = "SequenceID AAAA exists";
         assertEquals(test1, parsedOutput[0].trim());
     }
     
     /**
      * Tests the remove method to ensure it removes properly
      * and the output is correct
+     * @throws IOException if the file was not found
      */
-    public void testRemove()
+    public void testRemove() throws IOException
     {
-        
+        processor.remove("AAAA");
+        String output = outContent.toString();
+        String[] parsedOutput = output.split("\n");
+        String test1 = "SequenceID AAAA not found";
+        assertEquals(test1, parsedOutput[0].trim());
+        processor.insert("AAAA", "ACGTACGT");
+        output = outContent.toString();
+        parsedOutput = output.split("\n");
+        String test2 = "Sequence removed AAAA:";
+        String test3 = "ACGTACGT";
+        assertEquals(test2, parsedOutput[0].trim());
+        assertEquals(test3, parsedOutput[1].trim());
     }
     
     /**
