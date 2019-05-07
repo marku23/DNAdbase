@@ -19,6 +19,7 @@ public class DNAHashTableTest extends student.TestCase {
         table = new DNAHashTable(128);
     }
     
+    
     /**
      * Tests the insert method to make sure it inserts objects
      * as intended
