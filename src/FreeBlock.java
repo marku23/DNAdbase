@@ -56,6 +56,16 @@ public class FreeBlock implements Comparable<FreeBlock> {
     }
 
 
+    /**
+     * getter method.
+     * 
+     * @return
+     *         the ending offset of this free block.
+     */
+    public int getEnd() {
+        return offset + size;
+    }
+
     @Override
     public int compareTo(FreeBlock otherBlock) {
         if (offset > otherBlock.getOffset()) {
@@ -66,8 +76,10 @@ public class FreeBlock implements Comparable<FreeBlock> {
         }
         return 0;
     }
-    
+
+
     public String toString() {
-        return "Offset: " + offset + " Size in characters: " + size * 4 + " Size in bytes: " + size;
+        return "Offset: " + offset + " Size in characters: " + size * 4
+            + " Size in bytes: " + size;
     }
 }
