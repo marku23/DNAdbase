@@ -62,12 +62,14 @@ public class MemoryManager {
     public DNARecord addToMem(String seqID, String seq) throws IOException {
         int idL = seqID.length();
         int sL = seq.length();
+        int idSize = (int)Math.ceil(((double)seqID.length()) / 4);
+        int seqSize = (int)Math.ceil(((double)seq.length()) / 4);
         int idO = 0;
         int sO = 0;
         boolean added = false;
         byte[] idBytes = DNAtoBinary(seqID);
         for (FreeBlock block : freeBlocks) {
-            if (seqID.length() <= block.getSize()) {
+            if (idSize <= block.getSize()) {
                 writeToBlock(block, seqID);
                 idO = block.getOffset();
                 binFile.seek(idO);
@@ -87,8 +89,8 @@ public class MemoryManager {
         added = false;
         byte[] seqBytes = DNAtoBinary(seq);
         for (FreeBlock block : freeBlocks) {
-            if (seq.length() <= block.getSize()) {
-                writeToBlock(block, seqID);
+            if (seqSize <= block.getSize()) {
+                writeToBlock(block, seq);
                 sO = block.getOffset();
                 binFile.seek(sO);
                 binFile.write(seqBytes);
@@ -109,14 +111,15 @@ public class MemoryManager {
 
 
     private void writeToBlock(FreeBlock block, String str) {
-        if (block.getSize() == str.length()) {
+        int size = (int)Math.ceil(((double)str.length()) / 4);
+        if (block.getSize() == size) {
             freeBlocks.remove(block);
         }
         else {
-            int off = block.getOffset() + str.length();
-            int size = block.getSize() - str.length();
+            int off = block.getOffset() + size;
+            int newSize = block.getSize() - size;
             freeBlocks.remove(block);
-            freeBlocks.add(new FreeBlock(off, size));
+            freeBlocks.add(new FreeBlock(off, newSize));
             Collections.sort(freeBlocks);
         }
     }

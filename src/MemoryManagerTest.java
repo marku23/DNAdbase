@@ -108,10 +108,9 @@ public class MemoryManagerTest extends student.TestCase {
         assertEquals(seq2[0], bytes2[0]);
         blocks = manager.getFreeBlocks();
         duplicates = manager.getDuplicates();
-        System.out.println(blocks.getFirst());
         assertTrue(blocks.isEmpty());
         assertFalse(duplicates.contains("CCCC"));
-        assertTrue(duplicates.contains("AAAA"));
+        assertTrue(duplicates.contains("GGGG"));
         
     }
 }
