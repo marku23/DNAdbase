@@ -33,13 +33,14 @@ public class FileReader {
      *             - if one of the files could not be found
      */
     public FileReader(
-        File inputFile,
-        RandomAccessFile hashFile,
-        RandomAccessFile memoryFile, int tableSize)
+        String inputFile,
+        String hashFile,
+        String memoryFile,
+        int tableSize)
         throws FileNotFoundException {
-        input = inputFile;
-        hash = hashFile;
-        memory = memoryFile;
+        input = new File(inputFile);
+        hash = new RandomAccessFile(hashFile, "rw");
+        memory = new RandomAccessFile(memoryFile, "rw");
         reader = new Scanner(input);
         processor = new DataProcessor(memory, new DNAHashTable(tableSize));
     }
@@ -48,12 +49,14 @@ public class FileReader {
     /**
      * Reads through the input file and calls methods to process
      * the commands accordingly
-     * @throws IOException if the memory file was not found
+     * 
+     * @throws IOException
+     *             if the memory file was not found
      */
     public void processInput() throws IOException {
         while (reader.hasNext()) {
             String temp = reader.nextLine().trim();
-            String[] commands = temp.split(" \t\n");
+            String[] commands = temp.split("[ \t]");
             if (commands[0].equals("insert")) {
                 String ID = commands[1];
                 String seq = reader.nextLine();
@@ -71,7 +74,9 @@ public class FileReader {
                 processor.search(ID);
             }
             else {
-                System.out.println("Command not recognized");
+                if (temp.length() != 0) {
+                    System.out.println("Command not recognized");
+                }
             }
         }
 
