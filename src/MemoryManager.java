@@ -43,14 +43,14 @@ public class MemoryManager {
 
 
     public byte[] getID(DNARecord record) throws IOException {
-        byte[] bytes = new byte[record.getIDLength() / 4];
+        byte[] bytes = new byte[(int)Math.ceil(((double)record.getIDLength()) / 4)];
         binFile.read(bytes, record.getIDOffset(), record.getIDLength() / 4);
         return bytes;
     }
     
     
     public byte[] getSequence(DNARecord record) throws IOException {
-        byte[] bytes = new byte[record.getSeqLength() / 4];
+        byte[] bytes = new byte[(int)Math.ceil(((double)record.getSeqLength()) / 4)];
         binFile.read(bytes, record.getSeqOffset(), record.getSeqLength() / 4);
         return bytes;
     }
@@ -65,11 +65,12 @@ public class MemoryManager {
         byte[] idBytes = DNAtoBinary(seqID);
         for (FreeBlock block : freeBlocks) {
             if (seqID.length() <= block.getSize()) {
-                freeBlocks.remove(block);
+                writeToBlock(block, seqID);
                 idO = block.getOffset();
                 binFile.write(idBytes, idO, idBytes.length);
                 binSize += idBytes.length;
                 added = true;
+                break;
             }
         }
         if (!added) {
@@ -82,11 +83,12 @@ public class MemoryManager {
         byte[] seqBytes = DNAtoBinary(seq);
         for (FreeBlock block : freeBlocks) {
             if (seq.length() <= block.getSize()) {
-                freeBlocks.remove(block);
+                writeToBlock(block, seqID);
                 sO = block.getOffset();
                 binFile.write(seqBytes, idO, seqBytes.length);
                 binSize += seqBytes.length;
                 added = true;
+                break;
             }
         }
         if (!added) {
@@ -96,6 +98,19 @@ public class MemoryManager {
         }
         Collections.sort(freeBlocks);
         return new DNARecord(idO, sO, idL, sL);
+    }
+    
+    private void writeToBlock(FreeBlock block, String str) {
+        if (block.getSize() == str.length()) {
+            freeBlocks.remove(block);
+        }
+        else {
+            int off = block.getOffset() + str.length();
+            int size = block.getSize() - str.length();
+            freeBlocks.remove(block);
+            freeBlocks.add(new FreeBlock(off, size));
+            Collections.sort(freeBlocks);
+        }
     }
 
 
@@ -168,8 +183,16 @@ public class MemoryManager {
             freeBlocks.add(idBlock);
             int idEnd = idBlock.getOffset() + idBlock.getSize();
             if (idEnd == seqBlock.getOffset()) {
-                combine(idBlock, seqBlock);
+                idBlock = combine(idBlock, seqBlock);
             }
+        }
+        int idEnd = idBlock.getOffset() + idBlock.getSize();
+        int seqEnd = seqBlock.getOffset() + seqBlock.getSize();
+        if (idEnd == (int) binFile.length()) {
+            binFile.setLength(binFile.length() - idEnd);
+        }
+        else if (seqEnd == (int) binFile.length()) {
+            binFile.setLength(binFile.length() - seqEnd);
         }
 
         Collections.sort(freeBlocks);
