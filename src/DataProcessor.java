@@ -38,10 +38,8 @@ public class DataProcessor {
      *            - the ID of the sequence
      * @param seq
      *            - the sequence
-     * @param length
-     *            - the length of the sequence
      */
-    public void insert(String ID, String seq, int length) {
+    public void insert(String ID, String seq) {
         DNARecord thisRecord = manager.insert(ID, seq);
         if (thisRecord == null) {
             System.out.println("SequenceID " + ID + " exists");

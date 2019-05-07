@@ -1,5 +1,7 @@
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.RandomAccessFile;
 
 /**
@@ -15,6 +17,10 @@ import java.io.RandomAccessFile;
 public class DataProcessorTest extends student.TestCase {
 
     private DataProcessor processor;
+    private final ByteArrayOutputStream outContent =
+            new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+    
     
     /**
      * Sets up initial conditions
@@ -25,8 +31,42 @@ public class DataProcessorTest extends student.TestCase {
         DNAHashTable table = new DNAHashTable(128);
         RandomAccessFile binFile = new RandomAccessFile("processorTest.bin", "rw");
         processor = new DataProcessor(binFile, table);
+        System.setOut(new PrintStream(outContent));
     }
  
+    /**
+     * Tests the insert method to ensure that it inserts to 
+     * both the hash table and the memory manager as intended
+     * and that the output is correct
+     * @throws FileNotFoundException if the binFile was not found
+     */
+    public void testInsert() throws FileNotFoundException
+    {
+        setUp();
+        processor.insert("AAAA", "ACGTACGT");
+        processor.insert("AAAA", "ACGTACGT");
+        String output = outContent.toString();
+        String[] parsedOutput = output.split("\n");
+    }
+    
+    /**
+     * Tests the remove method to ensure it removes properly
+     * and the output is correct
+     */
+    public void testRemove()
+    {
+        
+    }
+    
+    /**
+     * Tests the search method to ensure it searches properly
+     * and the output is correct
+     */
+    public void testSearch()
+    {
+        
+    }
+    
     /**
      * Tests the binaryToDNA method to ensure it converts a byte 
      * array to a DNA string as intended
