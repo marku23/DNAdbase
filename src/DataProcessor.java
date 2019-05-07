@@ -59,8 +59,9 @@ public class DataProcessor {
      * 
      * @param ID
      *            - the ID of the sequence we are removing
+     * @throws IOException  if the file was not found
      */
-    public void remove(String ID) {
+    public void remove(String ID) throws IOException {
         boolean found = false;
         int destination = table.remove(ID);
         DNARecord target = null;
@@ -69,7 +70,7 @@ public class DataProcessor {
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
             DNARecord thisRecord = table.getTable()[i];
-            if (ID.equals(manager.getID(thisRecord))) {
+            if (ID.getBytes().equals(manager.getID(thisRecord))) {
                 table.getTable()[i].setIDLength(-1);
                 found = true;
                 target = thisRecord;
@@ -118,7 +119,7 @@ public class DataProcessor {
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
             DNARecord thisRecord = table.getTable()[i];
-            if (ID.equals(manager.getID(thisRecord))) {
+            if (ID.getBytes().equals(manager.getID(thisRecord))) {
                 System.out.print("Sequence found: ");
                 System.out.println(manager.getSequence(thisRecord));
                 found = true;
