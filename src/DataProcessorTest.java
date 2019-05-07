@@ -24,12 +24,13 @@ public class DataProcessorTest extends student.TestCase {
     
     /**
      * Sets up initial conditions
-     * @throws FileNotFoundException  - if the binaryFile was not found
+     * @throws IOException 
      */
-    public void setUp() throws FileNotFoundException
+    public void setUp() throws IOException
     {
         DNAHashTable table = new DNAHashTable(128);
         RandomAccessFile binFile = new RandomAccessFile("processorTest.bin", "rw");
+        binFile.setLength(0);
         processor = new DataProcessor(binFile, table);
         System.setOut(new PrintStream(outContent));
     }
@@ -64,12 +65,13 @@ public class DataProcessorTest extends student.TestCase {
         String test1 = "SequenceID AAAA not found";
         assertEquals(test1, parsedOutput[0].trim());
         processor.insert("AAAA", "ACGTACGT");
+        processor.remove("AAAA");
         output = outContent.toString();
         parsedOutput = output.split("\n");
         String test2 = "Sequence removed AAAA:";
         String test3 = "ACGTACGT";
-        assertEquals(test2, parsedOutput[0].trim());
-        assertEquals(test3, parsedOutput[1].trim());
+        assertEquals(test2, parsedOutput[1].trim());
+        assertEquals(test3, parsedOutput[2].trim());
     }
     
     /**
