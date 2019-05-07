@@ -58,5 +58,22 @@ public class DNAHashTableTest extends student.TestCase {
         assertNull(table.search("i wanna fuckin drop out lol"));
     }
     
+    /**
+     * Tests the print method to make sure it prints sequences
+     * as intended
+     */
+    public void testPrint()
+    {
+        
+    }
     
+    /**
+     * Tests the getTable method to ensure it returns a table object
+     * properly
+     */
+    public void testGetTable()
+    {
+        assertNotNull(table.getTable());
+    }
+
 }

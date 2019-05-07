@@ -4,7 +4,6 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public static final int bucketSize = 32;
     private DNARecord[] table;
     private int numBuckets;
-    private int numChars;
 
 
     // Constructors............................................................
@@ -19,7 +18,6 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public DNAHashTable(int size) {
         table = new DNARecord[size];
         numBuckets = size / bucketSize;
-        numChars = 0;
     }
 
 
@@ -45,7 +43,6 @@ public class DNAHashTable implements HashTable<DNARecord> {
             {
                 table[i] = value;
                 inserted = true;
-                numChars += key.length();
             }
         }
         return inserted;

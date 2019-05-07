@@ -48,8 +48,9 @@ public class FileReader {
     /**
      * Reads through the input file and calls methods to process
      * the commands accordingly
+     * @throws IOException if the memory file was not found
      */
-    public void processInput() {
+    public void processInput() throws IOException {
         while (reader.hasNext()) {
             String temp = reader.nextLine().trim();
             String[] commands = temp.split(" \t\n");
