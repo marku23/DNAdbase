@@ -47,6 +47,13 @@ public class MemoryManager {
         binFile.read(bytes, record.getIDOffset(), record.getIDLength() / 4);
         return bytes;
     }
+    
+    
+    public byte[] getSequence(DNARecord record) throws IOException {
+        byte[] bytes = new byte[record.getSeqLength() / 4];
+        binFile.read(bytes, record.getSeqOffset(), record.getSeqLength() / 4);
+        return bytes;
+    }
 
 
     public DNARecord addToMem(String seqID, String seq) throws IOException {
