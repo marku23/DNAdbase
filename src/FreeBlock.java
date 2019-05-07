@@ -66,4 +66,8 @@ public class FreeBlock implements Comparable<FreeBlock> {
         }
         return 0;
     }
+    
+    public String toString() {
+        return "Offset: " + offset + " Size in characters: " + size;
+    }
 }

@@ -36,22 +36,25 @@ public class MemoryManager {
             }
         }
         duplicateList.add(sequenceID);
-
         DNARecord record = addToMem(sequenceID, sequence);
         return record;
     }
 
 
     public byte[] getID(DNARecord record) throws IOException {
-        byte[] bytes = new byte[(int)Math.ceil(((double)record.getIDLength()) / 4)];
-        binFile.read(bytes, record.getIDOffset(), record.getIDLength() / 4);
+        int byteLength = (int)Math.ceil(((double)record.getIDLength()) / 4);
+        byte[] bytes = new byte[byteLength];
+        binFile.seek(record.getIDOffset());
+        binFile.read(bytes);
         return bytes;
     }
-    
-    
+
+
     public byte[] getSequence(DNARecord record) throws IOException {
-        byte[] bytes = new byte[(int)Math.ceil(((double)record.getSeqLength()) / 4)];
-        binFile.read(bytes, record.getSeqOffset(), record.getSeqLength() / 4);
+        int byteLength = (int)Math.ceil(((double)record.getSeqLength()) / 4);
+        byte[] bytes = new byte[byteLength];
+        binFile.seek(record.getSeqOffset());
+        binFile.read(bytes);
         return bytes;
     }
 
@@ -67,7 +70,8 @@ public class MemoryManager {
             if (seqID.length() <= block.getSize()) {
                 writeToBlock(block, seqID);
                 idO = block.getOffset();
-                binFile.write(idBytes, idO, idBytes.length);
+                binFile.seek(idO);
+                binFile.write(idBytes);
                 binSize += idBytes.length;
                 added = true;
                 break;
@@ -75,7 +79,8 @@ public class MemoryManager {
         }
         if (!added) {
             idO = (int)binFile.length();
-            binFile.write(idBytes, (int)binFile.length(), idBytes.length);
+            binFile.seek(binFile.length());
+            binFile.write(idBytes);
             binSize += idBytes.length;
         }
         Collections.sort(freeBlocks);
@@ -85,7 +90,8 @@ public class MemoryManager {
             if (seq.length() <= block.getSize()) {
                 writeToBlock(block, seqID);
                 sO = block.getOffset();
-                binFile.write(seqBytes, idO, seqBytes.length);
+                binFile.seek(sO);
+                binFile.write(seqBytes);
                 binSize += seqBytes.length;
                 added = true;
                 break;
@@ -93,13 +99,15 @@ public class MemoryManager {
         }
         if (!added) {
             sO = (int)binFile.length();
-            binFile.write(seqBytes, (int)binFile.length(), seqBytes.length);
+            binFile.seek(binFile.length());
+            binFile.write(seqBytes);
             binSize += seqBytes.length;
         }
         Collections.sort(freeBlocks);
-        return new DNARecord(idO, sO, idL, sL);
+        return new DNARecord(idO, idL, sO, sL);
     }
-    
+
+
     private void writeToBlock(FreeBlock block, String str) {
         if (block.getSize() == str.length()) {
             freeBlocks.remove(block);
@@ -114,17 +122,19 @@ public class MemoryManager {
     }
 
 
-    public String remove(DNARecord record) throws IOException {
+    public byte[] remove(DNARecord record, String seqID) throws IOException {
         int idSize = (int)Math.ceil(((double)record.getIDLength()) / 4);
         int seqSize = (int)Math.ceil(((double)record.getSeqLength()) / 4);
         byte[] sequence = new byte[seqSize];
-        binFile.read(sequence, record.getSeqOffset(), seqSize);
+        binFile.seek(record.getSeqOffset());
+        binFile.read(sequence);
         binSize -= (idSize + seqSize);
+        duplicateList.remove(seqID);
         FreeBlock idBlock = new FreeBlock(record.getIDOffset(), idSize);
         FreeBlock seqBlock = new FreeBlock(record.getSeqOffset(), seqSize);
         if (!freeBlocks.isEmpty()) {
-            FreeBlock left = null;
-            FreeBlock right = null;
+            FreeBlock left = freeBlocks.getFirst();
+            FreeBlock right = freeBlocks.getLast();
             for (int i = 0; i < freeBlocks.size(); i++) {
                 if (freeBlocks.get(i).compareTo(idBlock) < 0) {
                     left = freeBlocks.get(i);
@@ -151,8 +161,8 @@ public class MemoryManager {
                 freeBlocks.add(idBlock);
             }
             Collections.sort(freeBlocks);
-            left = null;
-            right = null;
+            left = freeBlocks.getFirst();
+            right = freeBlocks.getLast();
             for (int i = 0; i < freeBlocks.size(); i++) {
                 if (freeBlocks.get(i).compareTo(seqBlock) < 0) {
                     left = freeBlocks.get(i);
@@ -165,7 +175,8 @@ public class MemoryManager {
             }
             leftEnd = left.getOffset() + left.getSize();
             int seqEnd = seqBlock.getOffset() + seqBlock.getSize();
-            if (leftEnd == seqBlock.getOffset() && seqEnd == right.getOffset()) {
+            if (leftEnd == seqBlock.getOffset() && seqEnd == right
+                .getOffset()) {
                 seqBlock = combine(left, seqBlock);
                 seqBlock = combine(seqBlock, right);
             }
@@ -188,22 +199,24 @@ public class MemoryManager {
         }
         int idEnd = idBlock.getOffset() + idBlock.getSize();
         int seqEnd = seqBlock.getOffset() + seqBlock.getSize();
-        if (idEnd == (int) binFile.length()) {
+        if (idEnd == (int)binFile.length()) {
             binFile.setLength(binFile.length() - idEnd);
+            freeBlocks.remove(idBlock);
         }
-        else if (seqEnd == (int) binFile.length()) {
+        else if (seqEnd == (int)binFile.length()) {
             binFile.setLength(binFile.length() - seqEnd);
+            freeBlocks.remove(seqBlock);
         }
 
         Collections.sort(freeBlocks);
-
-        // IF removing from end, resize using setLength()
-        return null;
+        return sequence;
     }
-    
+
+
     public FreeBlock combine(FreeBlock left, FreeBlock right) {
         freeBlocks.remove(left);
-        FreeBlock newBlock = new FreeBlock(left.getOffset(), left.getSize() + right.getSize());
+        FreeBlock newBlock = new FreeBlock(left.getOffset(), left.getSize()
+            + right.getSize());
         freeBlocks.add(newBlock);
         Collections.sort(freeBlocks);
         return newBlock;
@@ -232,7 +245,9 @@ public class MemoryManager {
             }
             i++;
             if (i % 4 == 0) {
-                bytes[i / 4] = Byte.parseByte(build.toString());
+                // int parsed = Integer.parseInt(build.toString(), 2);
+                int b = Integer.parseInt(build.toString(), 2);
+                bytes[(i / 4) - 1] = (byte)b;
                 build = new StringBuilder();
             }
         }
@@ -240,7 +255,20 @@ public class MemoryManager {
             build.append("00");
             i++;
         }
-        bytes[i / 4] = Byte.parseByte(build.toString());
+        if (!build.toString().isEmpty()) {
+            int b = Integer.parseInt(build.toString(), 2);
+            bytes[(i / 4) - 1] = (byte)b;
+        }
         return bytes;
+    }
+
+
+    public LinkedList<String> getDuplicates() {
+        return duplicateList;
+    }
+
+
+    public LinkedList<FreeBlock> getFreeBlocks() {
+        return freeBlocks;
     }
 }
