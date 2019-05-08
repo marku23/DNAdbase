@@ -8,33 +8,32 @@
 
 public class DNARecord {
     // Variables...............................................................
-
-    private int IDOffset;
-    private int IDLength;
-    private int SeqOffset;
-    private int SeqLength;
-
-
+    
+    private int iDOffset;
+    private int iDLength;
+    private int seqOffset;
+    private int seqLength;
+    
     // Constructors............................................................
 
     /**
      * Creates a DNARecord object
      * 
      * @param off1
-     *            IDOffset
+     *      iDOffset
      * @param len1
-     *            IDLength
+     *      iDLength
      * @param off2
-     *            SeqOffset
+     *      seqOffset
      * @param len2
-     *            SeqLength
+     *      seqLength
      */
-
+    
     public DNARecord(int off1, int len1, int off2, int len2) {
-        IDOffset = off1;
-        SeqOffset = off2;
-        IDLength = len1;
-        SeqLength = len2;
+        iDOffset = off1;
+        seqOffset = off2;
+        iDLength = len1;
+        seqLength = len2;
     }
 
 
@@ -48,7 +47,7 @@ public class DNARecord {
      */
 
     public int getIDOffset() {
-        return IDOffset;
+        return iDOffset;
     }
 
 
@@ -60,7 +59,7 @@ public class DNARecord {
      */
 
     public int getSeqOffset() {
-        return SeqOffset;
+        return seqOffset;
     }
 
 
@@ -72,7 +71,7 @@ public class DNARecord {
      */
 
     public int getIDLength() {
-        return IDLength;
+        return iDLength;
     }
 
 
@@ -84,8 +83,9 @@ public class DNARecord {
      * @param newLength
      *            - the new length of the ID of this sequence
      */
-    public void setIDLength(int newLength) {
-        IDLength = newLength;
+    public void setIDLength(int newLength)
+    {
+        iDLength = newLength;
     }
 
 
@@ -97,7 +97,7 @@ public class DNARecord {
      */
 
     public int getSeqLength() {
-        return SeqLength;
+        return seqLength;
     }
 
 }

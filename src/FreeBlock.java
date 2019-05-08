@@ -1,4 +1,3 @@
-
 /**
  * Data type to represent the free spaces in memory.
  * 
@@ -66,7 +65,6 @@ public class FreeBlock implements Comparable<FreeBlock> {
         return offset + size;
     }
 
-
     @Override
     public int compareTo(FreeBlock otherBlock) {
         if (offset > otherBlock.getOffset()) {
@@ -78,9 +76,11 @@ public class FreeBlock implements Comparable<FreeBlock> {
         return 0;
     }
 
-
+    /**
+     * A method returning a string representation of this free block
+     * @return a string representation of this free block
+     */
     public String toString() {
-        return "Starting Byte Location: " + offset + ", Size " + size
-            + " bytes";
+        return "Starting Byte Location: " + offset + ", Size " + size + " bytes";
     }
 }

@@ -47,7 +47,7 @@ CCTTTTCCCCGGGGAAAACCCCGGGGTTTTAAAATTTT
 print
 
 
-              remove AAAAA
+              remove   	AAAAA
 
     remove AAA
 
@@ -55,6 +55,6 @@ remove AAAA
 
 print
 
-                 search AAAAA
+                 search  	 AAAAA
 
         search TCATATCTATCCAAAAAA

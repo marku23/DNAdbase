@@ -1,5 +1,4 @@
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
@@ -18,10 +17,7 @@ public class DataProcessorTest extends student.TestCase {
 
     private DataProcessor processor;
     private final ByteArrayOutputStream outContent =
-        new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-
-
+            new ByteArrayOutputStream();
     /**
      * Sets up initial conditions
      * 
@@ -29,8 +25,8 @@ public class DataProcessorTest extends student.TestCase {
      */
     public void setUp() throws IOException {
         DNAHashTable table = new DNAHashTable(128);
-        RandomAccessFile binFile = new RandomAccessFile("processorTest.bin",
-            "rw");
+        RandomAccessFile binFile = 
+                new RandomAccessFile("processorTest.bin", "rw");
         binFile.setLength(0);
         processor = new DataProcessor(binFile, table);
         System.setOut(new PrintStream(outContent));

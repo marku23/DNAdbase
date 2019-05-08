@@ -1,4 +1,4 @@
-import java.io.RandomAccessFile;
+
 // On my honor:
 //
 // - I have not used source code obtained from another student,
@@ -18,6 +18,10 @@ import java.io.RandomAccessFile;
 // anything during the discussion or modifies any computer file
 // during the discussion. I have violated neither the spirit nor
 // letter of this restriction.
+
+
+import java.io.*;
+
 /**
  * The main class for the program, which takes in arguments
  * from the command line and uses them to run the program.
@@ -27,8 +31,6 @@ import java.io.RandomAccessFile;
  * @version 5/4/19
  *
  */
-import java.io.*;
-
 public class DNAdbase {
 
     /**
@@ -43,12 +45,13 @@ public class DNAdbase {
         if (args.length < 4) {
             throw new IllegalArgumentException(
                 "Please specify the program arguments. "
-                    + "Invoke as: <command-file> <hash-file> <hash-table-size>\r\n"
-                    + "<memory-file>");
+                    + "Invoke as: <command-file> <hash-file>\\r\\n " + 
+                        "<hash-table-size <memory-file>");
         }
         else {
             int tableSize = Integer.parseInt(args[2]);
-            FileReader reader = new FileReader(args[0], args[1], args[3], tableSize);
+            FileReader reader = 
+                    new FileReader(args[0], args[1], args[3], tableSize);
             reader.processInput();
         }
 

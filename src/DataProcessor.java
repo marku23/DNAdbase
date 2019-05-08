@@ -1,20 +1,16 @@
+import java.io.*;
+import java.util.LinkedList;
 
 /**
- * A class that contains methods to insert,
- * remove, search for, and print dna sequences using the
- * hash file and memory file
+ * A class that contains methods to insert, remove, search for, and print dna
+ * sequences using the hash file and memory file
  * 
  * @author marku23
  * @author ccox17
  *
  */
-
-import java.io.*;
-import java.util.LinkedList;
-
 public class DataProcessor {
 
-    private RandomAccessFile memory;
     private DNAHashTable table;
     private MemoryManager manager;
 
@@ -22,13 +18,12 @@ public class DataProcessor {
     /**
      * Default constructor
      * 
-     * @param hashFile
-     *            - the file we are hashing to
-     * @param memory
-     *            - the memory file
+     * @param memoryFile
+     *            - the file we are writing to
+     * @param table
+     *            - the table we are hashing to
      */
     public DataProcessor(RandomAccessFile memoryFile, DNAHashTable table) {
-        memory = memoryFile;
         manager = new MemoryManager(memoryFile);
         this.table = table;
     }
@@ -107,12 +102,12 @@ public class DataProcessor {
     public void print() throws IOException {
         System.out.println("Sequence IDs:");
         for (int i = 0; i < table.getTable().length; i++) {
-            if (table.getTable()[i] != null && table.getTable()[i]
-                .getIDLength() > 0) {
+            if (table.getTable()[i] != null
+                    && table.getTable()[i].getIDLength() > 0) {
                 DNARecord thisRecord = table.getTable()[i];
                 byte[] thisID = manager.getID(thisRecord);
                 System.out.println(binaryToDNA(thisID, thisRecord.getIDLength())
-                    + ": hash slot [" + i + "]");
+                        + ": hash slot [" + i + "]");
             }
         }
         System.out.print("Free Block List:");
@@ -167,6 +162,8 @@ public class DataProcessor {
      * 
      * @param bin
      *            - the string of 0s and 1s
+     * @param length
+     *            - the expected length of the DNA string
      * @return the corresponding DNA string
      */
     public String binaryToDNA(byte[] bin, int length) {
@@ -182,20 +179,20 @@ public class DataProcessor {
                     substringIndex = sequenceLength;
                 }
                 String temp = binaryString.substring(j * 2, substringIndex);
-                switch (temp) {
-                    case ("00"):
-                        builder.append('A');
-                        break;
-                    case ("01"):
-                        builder.append('C');
-                        break;
-                    case ("10"):
-                        builder.append('G');
-                        break;
-                    default:
-                        builder.append('T');
-                }
+            switch (temp) {
+                case ("00"):
+                    builder.append('A');
+                    break;
+                case ("01"):
+                    builder.append('C');
+                    break;
+                case ("10"):
+                    builder.append('G');
+                    break;
+                default:
+                    builder.append('T');
             }
+        }
 
             sequenceLength -= 4;
         }

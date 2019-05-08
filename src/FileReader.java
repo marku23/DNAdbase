@@ -1,3 +1,5 @@
+import java.util.*;
+import java.io.*;
 
 /**
  * A java class that reads in commands from the input file and
@@ -8,14 +10,10 @@
  * @author ccox17
  *
  */
-import java.util.*;
-import java.io.*;
-
 public class FileReader {
 
     private DataProcessor processor;
     private Scanner reader;
-    private File input;
     private RandomAccessFile hash;
     private RandomAccessFile memory;
 
@@ -29,7 +27,12 @@ public class FileReader {
      *            - the file we are hashing to
      * @param memoryFile
      *            - the file we are storing sequences in
+<<<<<<< HEAD
+     * @param tableSize - the size of the hash table
+     * @throws IOException 
+=======
      * @throws IOException
+>>>>>>> 12f747769c24261ae898d3abb958d8110a389234
      */
     public FileReader(
         String inputFile,
@@ -37,11 +40,10 @@ public class FileReader {
         String memoryFile,
         int tableSize)
         throws IOException {
-        input = new File(inputFile);
         hash = new RandomAccessFile(hashFile, "rw");
         memory = new RandomAccessFile(memoryFile, "rw");
         memory.setLength(0);
-        reader = new Scanner(input);
+        reader = new Scanner(inputFile);
         processor = new DataProcessor(memory, new DNAHashTable(tableSize));
     }
 
@@ -60,7 +62,7 @@ public class FileReader {
             scan = new Scanner(temp);
             if (scan.hasNext()) {
                 String command = scan.next();
-                String[] commands = temp.split("[ \t]");
+               // String[] commands = temp.split("[ \t]");
                 if (command.equals("insert")) {
                     String ID = scan.next();
                     int size = Integer.parseInt(scan.next());
