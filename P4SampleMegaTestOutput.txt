@@ -1,0 +1,118 @@
+Sequence IDs:
+TAC: hash slot [3]
+TAG: hash slot [4]
+CAT: hash slot [23]
+GAT: hash slot [33]
+ATTAC: hash slot [36]
+GG: hash slot [53]
+ATC: hash slot [56]
+Free Block List: none
+Sequence Removed ATTAC:
+ATTACATTAC
+Sequence IDs:
+TAC: hash slot [3]
+TAG: hash slot [4]
+CAT: hash slot [23]
+GAT: hash slot [33]
+GG: hash slot [53]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 2, Size 5 bytes
+Sequence IDs:
+TAC: hash slot [3]
+TAG: hash slot [4]
+CAT: hash slot [23]
+CAG: hash slot [24]
+GAT: hash slot [33]
+GG: hash slot [53]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+Sequence Removed TAG:
+TAGTAG
+SequenceID TAG not found
+Sequence IDs:
+TAC: hash slot [3]
+CAT: hash slot [23]
+CAG: hash slot [24]
+GAT: hash slot [33]
+GG: hash slot [53]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+Sequence Removed GG:
+GGGGGGGG
+Sequence IDs:
+TAC: hash slot [3]
+CAT: hash slot [23]
+CAG: hash slot [24]
+GAT: hash slot [33]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+[Block 2] Starting Byte Location: 11, Size 3 bytes
+Sequence Removed GAT:
+GATGAT
+Sequence IDs:
+TAC: hash slot [3]
+CAT: hash slot [23]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+[Block 2] Starting Byte Location: 11, Size 6 bytes
+Sequence IDs:
+TAC: hash slot [3]
+AA: hash slot [18]
+CAT: hash slot [23]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 13, Size 4 bytes
+Sequence Removed AA:
+AAAAAA
+Sequence IDs:
+TAC: hash slot [3]
+CAT: hash slot [23]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+[Block 2] Starting Byte Location: 11, Size 6 bytes
+Sequence Removed CAT:
+CATCATCAT
+Sequence IDs:
+TAC: hash slot [3]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+Sequence IDs:
+TAC: hash slot [3]
+CAAAT: hash slot [7]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+Sequence Removed CAAAT:
+CAAATCAAATCAAATCAAATCAAATCAAATCAAATCAAATCAAAT
+Sequence IDs:
+TAC: hash slot [3]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+SequenceID TAG not found
+Sequence IDs:
+TAC: hash slot [3]
+CAG: hash slot [24]
+ATC: hash slot [56]
+Free Block List:
+[Block 1] Starting Byte Location: 6, Size 1 bytes
+Sequence Found: TAC
+Sequence Found: CAGCAGCAG
+Sequence Found: ATCATCATC
+SequenceID TAG not found
+SequenceID GG not found
+SequenceID GAT not found
+SequenceID CAAAT not found
