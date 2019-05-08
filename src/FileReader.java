@@ -1,3 +1,5 @@
+import java.util.*;
+import java.io.*;
 
 /**
  * A java class that reads in commands from the input file and
@@ -8,14 +10,10 @@
  * @author ccox17
  *
  */
-import java.util.*;
-import java.io.*;
-
 public class FileReader {
 
     private DataProcessor processor;
     private Scanner reader;
-    private File input;
     private RandomAccessFile hash;
     private RandomAccessFile memory;
 
@@ -29,6 +27,7 @@ public class FileReader {
      *            - the file we are hashing to
      * @param memoryFile
      *            - the file we are storing sequences in
+     * @param tableSize - the size of the hash table
      * @throws IOException 
      */
     public FileReader(
@@ -37,11 +36,10 @@ public class FileReader {
         String memoryFile,
         int tableSize)
         throws IOException {
-        input = new File(inputFile);
         hash = new RandomAccessFile(hashFile, "rw");
         memory = new RandomAccessFile(memoryFile, "rw");
         memory.setLength(0);
-        reader = new Scanner(input);
+        reader = new Scanner(inputFile);
         processor = new DataProcessor(memory, new DNAHashTable(tableSize));
     }
 
@@ -58,20 +56,20 @@ public class FileReader {
             String temp = reader.nextLine().trim();
             String[] commands = temp.split("[ \t]");
             if (commands[0].equals("insert")) {
-                String ID = commands[1];
+                String iD = commands[1];
                 String seq = reader.nextLine();
-                processor.insert(ID, seq);
+                processor.insert(iD, seq);
             }
             else if (commands[0].equals("remove")) {
-                String ID = commands[1];
-                processor.remove(ID);
+                String iD = commands[1];
+                processor.remove(iD);
             }
             else if (commands[0].equals("print")) {
                 processor.print();
             }
             else if (commands[0].equals("search")) {
-                String ID = commands[1];
-                processor.search(ID);
+                String iD = commands[1];
+                processor.search(iD);
             }
             else {
                 if (temp.length() != 0) {

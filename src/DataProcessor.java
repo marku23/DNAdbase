@@ -1,33 +1,28 @@
+import java.io.*;
+import java.util.LinkedList;
 
 /**
- * A class that contains methods to insert,
- * remove, search for, and print dna sequences using the
- * hash file and memory file
+ * A class that contains methods to insert, remove, search for, and print dna
+ * sequences using the hash file and memory file
  * 
  * @author marku23
  * @author ccox17
  *
  */
-
-import java.io.*;
-import java.util.LinkedList;
-
 public class DataProcessor {
 
-    private RandomAccessFile memory;
     private DNAHashTable table;
     private MemoryManager manager;
 
     /**
      * Default constructor
      * 
-     * @param hashFile
-     *            - the file we are hashing to
-     * @param memory
-     *            - the memory file
+     * @param memoryFile
+     *            - the file we are writing to
+     * @param table
+     *            - the table we are hashing to
      */
     public DataProcessor(RandomAccessFile memoryFile, DNAHashTable table) {
-        memory = memoryFile;
         manager = new MemoryManager(memoryFile);
         this.table = table;
     }
@@ -35,21 +30,22 @@ public class DataProcessor {
     /**
      * Inserts a DNA sequence into the hash table and the memory manager
      * 
-     * @param ID
+     * @param iD
      *            - the ID of the sequence
      * @param seq
      *            - the sequence
-     * @throws IOException if the file was not found
+     * @throws IOException
+     *             if the file was not found
      */
-    public void insert(String ID, String seq) throws IOException {
-        DNARecord thisRecord = manager.insert(ID, seq);
+    public void insert(String iD, String seq) throws IOException {
+        DNARecord thisRecord = manager.insert(iD, seq);
         if (thisRecord == null) {
-            System.out.println("SequenceID " + ID + " exists");
+            System.out.println("SequenceID " + iD + " exists");
         }
         else {
-            boolean inserted = table.insert(ID, thisRecord);
+            boolean inserted = table.insert(iD, thisRecord);
             if (!inserted) {
-                System.out.println("Bucket full. Sequence " + ID
+                System.out.println("Bucket full. Sequence " + iD
                         + " could not be inserted");
             }
         }
@@ -60,18 +56,22 @@ public class DataProcessor {
      * 
      * @param ID
      *            - the ID of the sequence we are removing
-     * @throws IOException  if the file was not found
+     * @throws IOException
+     *             if the file was not found
      */
-    public void remove(String ID) throws IOException {
+    public void remove(String iD) throws IOException {
         boolean found = false;
-        int destination = table.search(ID);
+        int destination = table.search(iD);
         DNARecord thisRecord = table.getHandleAtOffset(destination);
         int bucketStart = (destination / DNAHashTable.bucketSize)
                 * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
             thisRecord = table.getHandleAtOffset(i);
-            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.length() == thisRecord.getIDLength() && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
+            if (thisRecord != null && thisRecord.getIDLength() >= 0
+                    && iD.length() == thisRecord.getIDLength()
+                    && iD.equals(binaryToDNA(manager.getID(thisRecord),
+                            iD.length()))) {
                 found = true;
                 destination = i;
                 break;
@@ -79,14 +79,14 @@ public class DataProcessor {
         }
 
         if (found) {
-            byte[] sequence = manager.remove(thisRecord, ID);
-            System.out.println("Sequence Removed " + ID + ":");
-            System.out.println(binaryToDNA(sequence, thisRecord.getSeqLength()));
+            byte[] sequence = manager.remove(thisRecord, iD);
+            System.out.println("Sequence Removed " + iD + ":");
+            System.out
+                    .println(binaryToDNA(sequence, thisRecord.getSeqLength()));
             table.makeTombstone(destination);
         }
-        else
-        {
-            System.out.println("SequenceID " + ID + " not found");
+        else {
+            System.out.println("SequenceID " + iD + " not found");
         }
     }
 
@@ -99,11 +99,12 @@ public class DataProcessor {
     public void print() throws IOException {
         System.out.println("Sequence IDs:");
         for (int i = 0; i < table.getTable().length; i++) {
-            if (table.getTable()[i] != null && table.getTable()[i].getIDLength() > 0) {
+            if (table.getTable()[i] != null
+                    && table.getTable()[i].getIDLength() > 0) {
                 DNARecord thisRecord = table.getTable()[i];
                 byte[] thisID = manager.getID(thisRecord);
-                System.out.println(
-                        binaryToDNA(thisID, thisRecord.getIDLength())  + ": hash slot [" + i + "]");
+                System.out.println(binaryToDNA(thisID, thisRecord.getIDLength())
+                        + ": hash slot [" + i + "]");
             }
         }
         System.out.print("Free Block List:");
@@ -114,7 +115,8 @@ public class DataProcessor {
         else {
             System.out.println("");
             for (int i = 0; i < blocks.size(); i++) {
-                System.out.println("[Block " + (i + 1) + "] " + blocks.get(i).toString());
+                System.out.println(
+                        "[Block " + (i + 1) + "] " + blocks.get(i).toString());
             }
         }
     }
@@ -127,23 +129,26 @@ public class DataProcessor {
      * @throws IOException
      *             if the memory file was not found
      */
-    public void search(String ID) throws IOException {
-        int destination = table.search(ID);
+    public void search(String iD) throws IOException {
+        int destination = table.search(iD);
         boolean found = false;
         int bucketStart = ((int) destination / DNAHashTable.bucketSize)
                 * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
             DNARecord thisRecord = table.getTable()[i];
-            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
+            if (thisRecord != null && thisRecord.getIDLength() >= 0
+                    && iD.equals(binaryToDNA(manager.getID(thisRecord),
+                            iD.length()))) {
                 System.out.print("Sequence Found: ");
-                System.out.println(binaryToDNA(manager.getSequence(thisRecord), thisRecord.getSeqLength()));
+                System.out.println(binaryToDNA(manager.getSequence(thisRecord),
+                        thisRecord.getSeqLength()));
                 found = true;
                 break;
             }
         }
         if (!found) {
-            System.out.println("SequenceID " + ID + " not found");
+            System.out.println("SequenceID " + iD + " not found");
         }
     }
 
@@ -152,6 +157,8 @@ public class DataProcessor {
      * 
      * @param bin
      *            - the string of 0s and 1s
+     * @param length
+     *            - the expected length of the DNA string
      * @return the corresponding DNA string
      */
     public String binaryToDNA(byte[] bin, int length) {
@@ -167,22 +174,22 @@ public class DataProcessor {
                 if (substringIndex > (sequenceLength * 2)) {
                     substringIndex = sequenceLength;
                 }
-                    String temp = binaryString.substring(j * 2, substringIndex);
-                    switch (temp) {
-                    case ("00"):
-                        builder.append('A');
-                        break;
-                    case ("01"):
-                        builder.append('C');
-                        break;
-                    case ("10"):
-                        builder.append('G');
-                        break;
-                    default:
-                        builder.append('T');
-                    }
-                }
-            
+                String temp = binaryString.substring(j * 2, substringIndex);
+            switch (temp) {
+                case ("00"):
+                    builder.append('A');
+                    break;
+                case ("01"):
+                    builder.append('C');
+                    break;
+                case ("10"):
+                    builder.append('G');
+                    break;
+                default:
+                    builder.append('T');
+            }
+        }
+
             sequenceLength -= 4;
         }
         return builder.toString();

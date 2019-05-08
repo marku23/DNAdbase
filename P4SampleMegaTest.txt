@@ -48,8 +48,6 @@ AAAAAAAAAAAAAAAAAAAAAAAA
 
 print
 
-insert
-
 remove AA
 
 print

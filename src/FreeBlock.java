@@ -77,7 +77,10 @@ public class FreeBlock implements Comparable<FreeBlock> {
         return 0;
     }
 
-
+    /**
+     * A method returning a string representation of this free block
+     * @return a string representation of this free block
+     */
     public String toString() {
         return "Starting Byte Location: " + offset + ", Size " + size + " bytes";
     }

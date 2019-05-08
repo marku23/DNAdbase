@@ -1,9 +1,20 @@
-
+/**
+ * The class for the DNAHashTable, which implements a generic hash table of
+ * DNARecord objects
+ * 
+ * @author marku23
+ * @author ccox17
+ * @version 5.7.19
+ *
+ */
 public class DNAHashTable implements HashTable<DNARecord> {
     // Variables...............................................................
+    /**
+     * Universal bucket size; does not change
+     */
     public static final int bucketSize = 32;
     private DNARecord[] table;
-    private int numBuckets;
+    // private int numBuckets;
 
     // Constructors............................................................
 
@@ -16,7 +27,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
 
     public DNAHashTable(int size) {
         table = new DNARecord[size];
-        numBuckets = size / bucketSize;
+        // numBuckets = size / bucketSize;
     }
 
     // Methods.................................................................
@@ -33,7 +44,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
      */
     @Override
     public boolean insert(String key, DNARecord value) {
-        int destination = (int)sfold(key, table.length);
+        int destination = (int) sfold(key, table.length);
         boolean inserted = false;
         if (table[destination] == null
                 || table[destination].getIDLength() < 0) {
@@ -43,18 +54,19 @@ public class DNAHashTable implements HashTable<DNARecord> {
         else {
             int bucketStart = ((int) destination / bucketSize) * bucketSize;
             for (int i = destination; i < bucketStart + bucketSize; i++) {
-                if (table[i] == null || table[i].getIDLength() < 0 && !inserted) {
+                if (table[i] == null
+                        || table[i].getIDLength() < 0 && !inserted) {
                     table[i] = value;
                     inserted = true;
                     break;
                 }
             }
-            for (int i = bucketStart; i < destination; i++)
-            {
-                if ((table[i] == null || table[i].getIDLength() < 0) && !inserted) {
+            for (int i = bucketStart; i < destination; i++) {
+                if ((table[i] == null || table[i].getIDLength() < 0)
+                        && !inserted) {
                     table[i] = value;
                     inserted = true;
-                   // break;
+                    // break;
                 }
             }
         }
@@ -129,11 +141,11 @@ public class DNAHashTable implements HashTable<DNARecord> {
      *            - the size of the hash table
      * @return a long representing the index that the record should occupy
      */
-    long sfold(String s, int M) {
+    long sfold(String s, int m) {
         int intLength = s.length() / 4;
         long sum = 0;
         for (int j = 0; j < intLength; j++) {
-            char c[] = s.substring(j * 4, (j * 4) + 4).toCharArray();
+            char[] c = s.substring(j * 4, (j * 4) + 4).toCharArray();
             long mult = 1;
             for (int k = 0; k < c.length; k++) {
                 sum += c[k] * mult;
@@ -141,7 +153,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
             }
         }
 
-        char c[] = s.substring(intLength * 4).toCharArray();
+        char[] c = s.substring(intLength * 4).toCharArray();
         long mult = 1;
         for (int k = 0; k < c.length; k++) {
             sum += c[k] * mult;
@@ -149,7 +161,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
         }
 
         sum = (sum * sum) >> 8;
-        return (Math.abs(sum) % M);
+        return (Math.abs(sum) % m);
     }
 
 }
