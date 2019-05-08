@@ -31,6 +31,12 @@ public class DNAHashTableTest extends student.TestCase {
         assertNotNull(table.getTable()[74]);
         table.insert("AAAAAAAA", temp);
         assertNotNull(table.getTable()[75]);
+        
+        // Try inserting to a full bucket
+        for (int i = 0; i < 30; i++) {
+            table.insert("AAAAAAAA", temp);
+        }
+        assertFalse(table.insert("AAAAAAAA", temp));
     }
     
     /**
