@@ -37,22 +37,22 @@ public class DataProcessor {
     /**
      * Inserts a DNA sequence into the hash table and the memory manager
      * 
-     * @param ID
+     * @param seqID
      *            - the ID of the sequence
      * @param seq
      *            - the sequence
      * @throws IOException
      *             if the file was not found
      */
-    public void insert(String ID, String seq) throws IOException {
-        DNARecord thisRecord = manager.insert(ID, seq);
+    public void insert(String seqID, String seq) throws IOException {
+        DNARecord thisRecord = manager.insert(seqID, seq);
         if (thisRecord == null) {
-            System.out.println("SequenceID " + ID + " exists");
+            System.out.println("SequenceID " + seqID + " exists");
         }
         else {
-            boolean inserted = table.insert(ID, thisRecord);
+            boolean inserted = table.insert(seqID, thisRecord);
             if (!inserted) {
-                System.out.println("Bucket full. Sequence " + ID
+                System.out.println("Bucket full. Sequence " + seqID
                     + " could not be inserted");
             }
         }
@@ -62,23 +62,23 @@ public class DataProcessor {
     /**
      * Removes a sequence with the given ID from the memory manager
      * 
-     * @param ID
+     * @param seqID
      *            - the ID of the sequence we are removing
      * @throws IOException
      *             if the file was not found
      */
-    public void remove(String ID) throws IOException {
+    public void remove(String seqID) throws IOException {
         boolean found = false;
-        int destination = table.search(ID);
+        int destination = table.search(seqID);
         DNARecord thisRecord = table.getHandleAtOffset(destination);
         int bucketStart = (destination / DNAHashTable.bucketSize)
             * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
             + DNAHashTable.bucketSize; i++) {
             thisRecord = table.getHandleAtOffset(i);
-            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID
-                .length() == thisRecord.getIDLength() && ID.equals(binaryToDNA(
-                    manager.getID(thisRecord), ID.length()))) {
+            if (thisRecord != null && thisRecord.getIDLength() >= 0 && seqID
+                .length() == thisRecord.getIDLength() && seqID.equals(binaryToDNA(
+                    manager.getID(thisRecord), seqID.length()))) {
                 found = true;
                 destination = i;
                 break;
@@ -86,14 +86,14 @@ public class DataProcessor {
         }
 
         if (found) {
-            byte[] sequence = manager.remove(thisRecord, ID);
-            System.out.println("Sequence Removed " + ID + ":");
+            byte[] sequence = manager.remove(thisRecord, seqID);
+            System.out.println("Sequence Removed " + seqID + ":");
             System.out.println(binaryToDNA(sequence, thisRecord
                 .getSeqLength()));
             table.makeTombstone(destination);
         }
         else {
-            System.out.println("SequenceID " + ID + " not found");
+            System.out.println("SequenceID " + seqID + " not found");
         }
     }
 
@@ -133,13 +133,13 @@ public class DataProcessor {
     /**
      * Prints out the sequence associated with the given ID, if there is one
      * 
-     * @param ID
+     * @param seqID
      *            - the ID of the sequence we are searching for
      * @throws IOException
      *             if the memory file was not found
      */
-    public void search(String ID) throws IOException {
-        int destination = table.search(ID);
+    public void search(String seqID) throws IOException {
+        int destination = table.search(seqID);
         boolean found = false;
         int bucketStart = ((int)destination / DNAHashTable.bucketSize)
             * DNAHashTable.bucketSize;
@@ -147,8 +147,8 @@ public class DataProcessor {
             + DNAHashTable.bucketSize; i++) {
             DNARecord thisRecord = table.getHandleAtOffset(i);
             if (thisRecord != null && thisRecord.getIDLength() >= 0
-                && thisRecord.getIDLength() == ID.length() && ID.equals(
-                    binaryToDNA(manager.getID(thisRecord), ID.length()))) {
+                && thisRecord.getIDLength() == seqID.length() && seqID.equals(
+                    binaryToDNA(manager.getID(thisRecord), seqID.length()))) {
                 System.out.print("Sequence Found: ");
                 System.out.println(binaryToDNA(manager.getSequence(thisRecord),
                     thisRecord.getSeqLength()));
@@ -157,7 +157,7 @@ public class DataProcessor {
             }
         }
         if (!found) {
-            System.out.println("SequenceID " + ID + " not found");
+            System.out.println("SequenceID " + seqID + " not found");
         }
     }
 

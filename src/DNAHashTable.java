@@ -1,4 +1,3 @@
-
 public class DNAHashTable implements HashTable<DNARecord> {
     // Variables...............................................................
     public static final int bucketSize = 32;

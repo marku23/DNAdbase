@@ -20,6 +20,13 @@ public class MemoryManager {
     private int binSize;
 
 
+    /**
+     * Creates a new MemoryManager Object
+     * 
+     * @param bin
+     *            The binary file to write and read from.
+     */
+
     public MemoryManager(RandomAccessFile bin) {
         duplicateList = new LinkedList<String>();
         freeBlocks = new LinkedList<FreeBlock>();
@@ -27,6 +34,19 @@ public class MemoryManager {
         binSize = 0;
     }
 
+
+    /**
+     * Inserts a new sequence and sequenceID into the binary file, if it's not a
+     * duplicate ID.
+     * 
+     * @param sequenceID
+     *            the sequenceID to be written to the binary file.
+     * @param sequence
+     *            the sequence to be written to the binary file.
+     * @return
+     *         a memory handle for the inserted sequence and ID.
+     * @throws IOException
+     */
 
     public DNARecord insert(String sequenceID, String sequence)
         throws IOException {
@@ -41,6 +61,16 @@ public class MemoryManager {
     }
 
 
+    /**
+     * getter method for the ID at the relevant offset.
+     * 
+     * @param record
+     *            the memory handle for the requested ID.
+     * @return
+     *         a byte[] holding the byte representation of the stored ID.
+     * @throws IOException
+     */
+
     public byte[] getID(DNARecord record) throws IOException {
         int byteLength = (int)Math.ceil(((double)record.getIDLength()) / 4);
         byte[] bytes = new byte[byteLength];
@@ -50,6 +80,16 @@ public class MemoryManager {
     }
 
 
+    /**
+     * getter method for the Sequence at the relevant offset.
+     * 
+     * @param record
+     *            the memory handle for the requested Sequence
+     * @return
+     *         the byte representation of the stored sequence.
+     * @throws IOException
+     */
+
     public byte[] getSequence(DNARecord record) throws IOException {
         int byteLength = (int)Math.ceil(((double)record.getSeqLength()) / 4);
         byte[] bytes = new byte[byteLength];
@@ -58,6 +98,18 @@ public class MemoryManager {
         return bytes;
     }
 
+
+    /**
+     * adds a sequence and ID to memory.
+     * 
+     * @param seqID
+     *            The ID to be added
+     * @param seq
+     *            The Sequence to be added.
+     * @return
+     *         the memory handle for the inserted sequence and ID.
+     * @throws IOException
+     */
 
     public DNARecord addToMem(String seqID, String seq) throws IOException {
         int idL = seqID.length();
@@ -110,6 +162,15 @@ public class MemoryManager {
     }
 
 
+    /**
+     * properly modifies or removes freeBlocks to represent changes in memory
+     * 
+     * @param block
+     *            the block that is being written to
+     * @param str
+     *            the string being written to the block
+     */
+
     private void writeToBlock(FreeBlock block, String str) {
         int size = (int)Math.ceil(((double)str.length()) / 4);
         if (block.getSize() == size) {
@@ -124,6 +185,18 @@ public class MemoryManager {
         }
     }
 
+
+    /**
+     * Removes a Sequence and its ID from memory.
+     * 
+     * @param record
+     *            the memory handle for the relevant Sequence and ID
+     * @param seqID
+     *            the string representation of the sequence ID being removed.
+     * @return
+     *         the byte representation of the removed sequence.
+     * @throws IOException
+     */
 
     public byte[] remove(DNARecord record, String seqID) throws IOException {
         int idSize = (int)Math.ceil(((double)record.getIDLength()) / 4);
@@ -266,6 +339,18 @@ public class MemoryManager {
     }
 
 
+    /**
+     * Combines two FreeBlocks.
+     * 
+     * @param left
+     *            The block on the left of the combination - already in the list
+     *            when combine is called
+     * @param right
+     *            The block on the right of the combination - not in the list
+     *            when combine is called
+     * @return
+     *         The resultant block of the combination.
+     */
     public FreeBlock combine(FreeBlock left, FreeBlock right) {
         freeBlocks.remove(left);
         FreeBlock newBlock = new FreeBlock(left.getOffset(), left.getSize()
@@ -275,6 +360,15 @@ public class MemoryManager {
         return newBlock;
     }
 
+
+    /**
+     * converts a string to an encoded byte[]
+     * 
+     * @param seq
+     *            the string to be converted
+     * @return
+     *         the encoded byte[]
+     */
 
     public byte[] DNAtoBinary(String seq) {
         StringBuilder build = new StringBuilder();
@@ -316,15 +410,35 @@ public class MemoryManager {
     }
 
 
+    /**
+     * getter method, exclusively for testing
+     * 
+     * @return
+     *         the list of duplicates
+     */
+
     public LinkedList<String> getDuplicates() {
         return duplicateList;
     }
 
 
+    /**
+     * getter method, exclusively for testing
+     * 
+     * @return
+     *         the list of FreeBlocks
+     */
+
     public LinkedList<FreeBlock> getFreeBlocks() {
         return freeBlocks;
     }
 
+
+    /**
+     * clears the MemoryManager and the BinaryFile, exclusively for testing
+     * 
+     * @throws IOException
+     */
 
     public void clear() throws IOException {
         binFile.setLength(0);
