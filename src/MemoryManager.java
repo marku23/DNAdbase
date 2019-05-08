@@ -193,57 +193,63 @@ public class MemoryManager {
                 }
             }
             /*
-            int leftEnd = left.getOffset() + left.getSize();
-            int idEnd = idBlock.getOffset() + idBlock.getSize();
-            if (leftEnd == idBlock.getOffset() && idEnd == right.getOffset()) {
-                idBlock = combine(left, idBlock);
-                idBlock = combine(idBlock, right);
-            }
-            else if (leftEnd == idBlock.getOffset()) {
-                idBlock = combine(left, idBlock);
-            }
-            else if (idEnd == right.getOffset()) {
-                idBlock = combine(idBlock, right);
-            }
-            else {
-                freeBlocks.add(idBlock);
-            }
-            
-            Collections.sort(freeBlocks);
-            left = freeBlocks.getFirst();
-            right = freeBlocks.getLast();
-            for (int i = 0; i < freeBlocks.size(); i++) {
-                if (freeBlocks.get(i).compareTo(seqBlock) < 0) {
-                    left = freeBlocks.get(i);
-                }
-            }
-            for (int j = freeBlocks.size() - 1; j > 0; j--) {
-                if (freeBlocks.get(j).compareTo(seqBlock) > 0) {
-                    right = freeBlocks.get(j);
-                }
-            }
-            leftEnd = left.getOffset() + left.getSize();
-            int seqEnd = seqBlock.getOffset() + seqBlock.getSize();
-            if (leftEnd == seqBlock.getOffset() && seqEnd == right
-                .getOffset()) {
-                seqBlock = combine(left, seqBlock);
-                seqBlock = combine(seqBlock, right);
-            }
-            else if (leftEnd == seqBlock.getOffset()) {
-                seqBlock = combine(left, seqBlock);
-            }
-            else if (seqEnd == right.getOffset()) {
-                seqBlock = combine(idBlock, right);
+             * int leftEnd = left.getOffset() + left.getSize();
+             * int idEnd = idBlock.getOffset() + idBlock.getSize();
+             * if (leftEnd == idBlock.getOffset() && idEnd == right.getOffset())
+             * {
+             * idBlock = combine(left, idBlock);
+             * idBlock = combine(idBlock, right);
+             * }
+             * else if (leftEnd == idBlock.getOffset()) {
+             * idBlock = combine(left, idBlock);
+             * }
+             * else if (idEnd == right.getOffset()) {
+             * idBlock = combine(idBlock, right);
+             * }
+             * else {
+             * freeBlocks.add(idBlock);
+             * }
+             * 
+             * Collections.sort(freeBlocks);
+             * left = freeBlocks.getFirst();
+             * right = freeBlocks.getLast();
+             * for (int i = 0; i < freeBlocks.size(); i++) {
+             * if (freeBlocks.get(i).compareTo(seqBlock) < 0) {
+             * left = freeBlocks.get(i);
+             * }
+             * }
+             * for (int j = freeBlocks.size() - 1; j > 0; j--) {
+             * if (freeBlocks.get(j).compareTo(seqBlock) > 0) {
+             * right = freeBlocks.get(j);
+             * }
+             * }
+             * leftEnd = left.getOffset() + left.getSize();
+             * int seqEnd = seqBlock.getOffset() + seqBlock.getSize();
+             * if (leftEnd == seqBlock.getOffset() && seqEnd == right
+             * .getOffset()) {
+             * seqBlock = combine(left, seqBlock);
+             * seqBlock = combine(seqBlock, right);
+             * }
+             * else if (leftEnd == seqBlock.getOffset()) {
+             * seqBlock = combine(left, seqBlock);
+             * }
+             * else if (seqEnd == right.getOffset()) {
+             * seqBlock = combine(idBlock, right);
+             * }
+             * else {
+             * freeBlocks.add(seqBlock);
+             * }
+             */
+        }
+        else {
+            freeBlocks.add(idBlock);
+            int idEnd = idBlock.getEnd();
+            if (idEnd == seqBlock.getOffset()) {
+                idBlock = combine(idBlock, seqBlock);
             }
             else {
                 freeBlocks.add(seqBlock);
             }
-            */
-        }
-        else {
-            freeBlocks.add(idBlock);
-            int idEnd = idBlock.getOffset() + idBlock.getSize();
-            idBlock = combine(idBlock, seqBlock);
         }
         int idEnd = idBlock.getEnd();
         int seqEnd = seqBlock.getEnd();
@@ -318,7 +324,8 @@ public class MemoryManager {
     public LinkedList<FreeBlock> getFreeBlocks() {
         return freeBlocks;
     }
-    
+
+
     public void clear() throws IOException {
         binFile.setLength(0);
         duplicateList.clear();

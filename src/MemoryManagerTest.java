@@ -345,7 +345,7 @@ public class MemoryManagerTest extends student.TestCase {
         record4 = manager.insert("TTTT", "TTTT");
         record5 = manager.insert("ACGT", "ACGT");
         record6 = manager.insert("AACC", "AACC");
-        
+
         // Test sequence left
         manager.remove(record, "AAAA");
         manager.remove(record4, "TTTT");
@@ -362,7 +362,7 @@ public class MemoryManagerTest extends student.TestCase {
         block = blocks.getLast();
         assertEquals(block.getOffset(), 4);
         assertEquals(block.getSize(), 4);
-        
+
         // clear
         manager.clear();
         record = manager.insert("AAAA", "AAAA");
@@ -371,7 +371,7 @@ public class MemoryManagerTest extends student.TestCase {
         record4 = manager.insert("TTTT", "TTTT");
         record5 = manager.insert("ACGT", "ACGT");
         record6 = manager.insert("AACC", "AACC");
-        
+
         // Test sequence right
         manager.remove(record, "AAAA");
         manager.remove(record4, "TTTT");

@@ -8,85 +8,94 @@
 
 public class DNARecord {
     // Variables...............................................................
-    
+
     private int IDOffset;
     private int IDLength;
     private int SeqOffset;
     private int SeqLength;
-    
+
+
     // Constructors............................................................
-    
+
     /**
-     * Creates a DNARecord object 
+     * Creates a DNARecord object
+     * 
      * @param off1
-     *      IDOffset
+     *            IDOffset
      * @param len1
-     *      IDLength
+     *            IDLength
      * @param off2
-     *      SeqOffset
+     *            SeqOffset
      * @param len2
-     *      SeqLength
+     *            SeqLength
      */
-    
-    public DNARecord (int off1, int len1, int off2, int len2) {
+
+    public DNARecord(int off1, int len1, int off2, int len2) {
         IDOffset = off1;
         SeqOffset = off2;
         IDLength = len1;
         SeqLength = len2;
     }
-    
-    
+
+
     // Methods.................................................................
-    
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The offset of the SequenceID in the memory manager.
+     *         The offset of the SequenceID in the memory manager.
      */
-    
+
     public int getIDOffset() {
         return IDOffset;
     }
-    
-    
+
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The offset of the Sequence in the binary file.
+     *         The offset of the Sequence in the binary file.
      */
-    
+
     public int getSeqOffset() {
         return SeqOffset;
     }
-    
-    
+
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The length of the SequenceID in the memory manager.
+     *         The length of the SequenceID in the memory manager.
      */
-    
+
     public int getIDLength() {
         return IDLength;
     }
-    
+
+
     /**
-     * Changes the IDLength of this DNARecord. This is used for setting 
+     * Changes the IDLength of this DNARecord. This is used for setting
      * our condition for a tombstone: if the ID length is negative, then this
      * is a tombstone.
-     * @param newLength - the new length of the ID of this sequence
+     * 
+     * @param newLength
+     *            - the new length of the ID of this sequence
      */
-    public void setIDLength(int newLength)
-    {
+    public void setIDLength(int newLength) {
         IDLength = newLength;
     }
-    
+
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The length of the Sequence in the binary file.
+     *         The length of the Sequence in the binary file.
      */
-    
+
     public int getSeqLength() {
         return SeqLength;
     }

@@ -66,6 +66,7 @@ public class FreeBlock implements Comparable<FreeBlock> {
         return offset + size;
     }
 
+
     @Override
     public int compareTo(FreeBlock otherBlock) {
         if (offset > otherBlock.getOffset()) {
@@ -79,6 +80,7 @@ public class FreeBlock implements Comparable<FreeBlock> {
 
 
     public String toString() {
-        return "Starting Byte Location: " + offset + ", Size " + size + " bytes";
+        return "Starting Byte Location: " + offset + ", Size " + size
+            + " bytes";
     }
 }

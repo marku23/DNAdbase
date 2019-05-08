@@ -31,7 +31,7 @@ CAGCAGCAG
 print
 
 remove TAG
-search TAG
+search  	TAG
 
 print
 
@@ -47,8 +47,6 @@ insert AA 6
 AAAAAAAAAAAAAAAAAAAAAAAA
 
 print
-
-insert
 
 remove AA
 

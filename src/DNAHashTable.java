@@ -5,6 +5,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
     private DNARecord[] table;
     private int numBuckets;
 
+
     // Constructors............................................................
 
     /**
@@ -18,6 +19,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
         table = new DNARecord[size];
         numBuckets = size / bucketSize;
     }
+
 
     // Methods.................................................................
 
@@ -35,31 +37,33 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public boolean insert(String key, DNARecord value) {
         int destination = (int)sfold(key, table.length);
         boolean inserted = false;
-        if (table[destination] == null
-                || table[destination].getIDLength() < 0) {
+        if (table[destination] == null || table[destination]
+            .getIDLength() < 0) {
             table[destination] = value;
             inserted = true;
         }
         else {
-            int bucketStart = ((int) destination / bucketSize) * bucketSize;
+            int bucketStart = ((int)destination / bucketSize) * bucketSize;
             for (int i = destination; i < bucketStart + bucketSize; i++) {
-                if (table[i] == null || table[i].getIDLength() < 0 && !inserted) {
+                if (table[i] == null || table[i].getIDLength() < 0
+                    && !inserted) {
                     table[i] = value;
                     inserted = true;
                     break;
                 }
             }
-            for (int i = bucketStart; i < destination; i++)
-            {
-                if ((table[i] == null || table[i].getIDLength() < 0) && !inserted) {
+            for (int i = bucketStart; i < destination; i++) {
+                if ((table[i] == null || table[i].getIDLength() < 0)
+                    && !inserted) {
                     table[i] = value;
                     inserted = true;
-                   // break;
+                    break;
                 }
             }
         }
         return inserted;
     }
+
 
     /**
      * Returns the location that the key would be hashed to so that the remove
@@ -71,8 +75,9 @@ public class DNAHashTable implements HashTable<DNARecord> {
      */
     @Override
     public int remove(String key) {
-        return (int) sfold(key, table.length);
+        return (int)sfold(key, table.length);
     }
+
 
     /**
      * Searches the hash table for a record with the given ID and returns it, if
@@ -85,8 +90,9 @@ public class DNAHashTable implements HashTable<DNARecord> {
      */
     @Override
     public int search(String key) {
-        return (int) sfold(key, table.length);
+        return (int)sfold(key, table.length);
     }
+
 
     /**
      * Gets the handle of the DNARecord stored at the given offset in the table
@@ -99,6 +105,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
         return table[offset];
     }
 
+
     /**
      * Returns the table; used in testing
      * 
@@ -107,6 +114,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public DNARecord[] getTable() {
         return table;
     }
+
 
     /**
      * Makes the entry in the table at the given index into a tombstone by
@@ -118,6 +126,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
     public void makeTombstone(int index) {
         table[index].setIDLength(-1);
     }
+
 
     /**
      * A function to calculate the index that a DNARecord should be placed in
