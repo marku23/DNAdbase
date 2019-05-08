@@ -43,7 +43,7 @@ public class DNAHashTable implements HashTable<DNARecord> {
         else {
             int bucketStart = ((int) destination / bucketSize) * bucketSize;
             for (int i = destination; i < bucketStart + bucketSize; i++) {
-                if (table[i] == null || table[i].getIDLength() < 0) {
+                if (table[i] == null || table[i].getIDLength() < 0 && !inserted) {
                     table[i] = value;
                     inserted = true;
                     break;
@@ -51,10 +51,10 @@ public class DNAHashTable implements HashTable<DNARecord> {
             }
             for (int i = bucketStart; i < destination; i++)
             {
-                if (table[i] == null || table[i].getIDLength() < 0) {
+                if ((table[i] == null || table[i].getIDLength() < 0) && !inserted) {
                     table[i] = value;
                     inserted = true;
-                    break;
+                   // break;
                 }
             }
         }

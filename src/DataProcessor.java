@@ -71,7 +71,7 @@ public class DataProcessor {
         for (int i = bucketStart; i < bucketStart
                 + DNAHashTable.bucketSize; i++) {
             thisRecord = table.getHandleAtOffset(i);
-            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
+            if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.length() == thisRecord.getIDLength() && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
                 found = true;
                 destination = i;
                 break;
@@ -80,9 +80,9 @@ public class DataProcessor {
 
         if (found) {
             byte[] sequence = manager.remove(thisRecord, ID);
-            table.makeTombstone(destination);
-            System.out.println("Sequence removed " + ID + ":");
+            System.out.println("Sequence Removed " + ID + ":");
             System.out.println(binaryToDNA(sequence, thisRecord.getSeqLength()));
+            table.makeTombstone(destination);
         }
         else
         {
@@ -99,7 +99,7 @@ public class DataProcessor {
     public void print() throws IOException {
         System.out.println("Sequence IDs:");
         for (int i = 0; i < table.getTable().length; i++) {
-            if (table.getTable()[i] != null) {
+            if (table.getTable()[i] != null && table.getTable()[i].getIDLength() > 0) {
                 DNARecord thisRecord = table.getTable()[i];
                 byte[] thisID = manager.getID(thisRecord);
                 System.out.println(
@@ -114,7 +114,7 @@ public class DataProcessor {
         else {
             System.out.println("");
             for (int i = 0; i < blocks.size(); i++) {
-                System.out.println("[Block " + i + "] " + blocks.get(i).toString());
+                System.out.println("[Block " + (i + 1) + "] " + blocks.get(i).toString());
             }
         }
     }
@@ -136,7 +136,7 @@ public class DataProcessor {
                 + DNAHashTable.bucketSize; i++) {
             DNARecord thisRecord = table.getTable()[i];
             if (thisRecord != null && thisRecord.getIDLength() >= 0 && ID.equals(binaryToDNA(manager.getID(thisRecord), ID.length()))) {
-                System.out.print("Sequence found: ");
+                System.out.print("Sequence Found: ");
                 System.out.println(binaryToDNA(manager.getSequence(thisRecord), thisRecord.getSeqLength()));
                 found = true;
                 break;

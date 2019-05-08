@@ -28,7 +28,6 @@ public class DNAHashTableTest extends student.TestCase {
     {
         DNARecord temp = new DNARecord(0, 8, 8, 8);
         table.insert("AAAAAAAA", temp);
-        System.out.println(table.sfold("AAAAAAAA", 128));
         assertNotNull(table.getTable()[74]);
         table.insert("AAAAAAAA", temp);
         assertNotNull(table.getTable()[75]);

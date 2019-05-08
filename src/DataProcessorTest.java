@@ -68,7 +68,7 @@ public class DataProcessorTest extends student.TestCase {
         processor.remove("AAAA");
         output = outContent.toString();
         parsedOutput = output.split("\n");
-        String test2 = "Sequence removed AAAA:";
+        String test2 = "Sequence Removed AAAA:";
         String test3 = "ACGTACGT";
         assertEquals(test2, parsedOutput[1].trim());
         assertEquals(test3, parsedOutput[2].trim());
@@ -90,7 +90,7 @@ public class DataProcessorTest extends student.TestCase {
         processor.search("AAAA");
         output = outContent.toString();
         parsedOutput = output.split("\n");
-        String test2 = "Sequence found: ACGTACGT";
+        String test2 = "Sequence Found: ACGTACGT";
         assertEquals(test2, parsedOutput[1].trim());
     }
     
@@ -109,7 +109,7 @@ public class DataProcessorTest extends student.TestCase {
         processor.print();
         output = outContent.toString();
         parsedOutput = output.split("\n");
-        assertEquals("AAAA: hash slot [18]", parsedOutput[2].trim());
+        assertEquals("AAAA: hash slot [18]", parsedOutput[3].trim());
     }
     
     /**
