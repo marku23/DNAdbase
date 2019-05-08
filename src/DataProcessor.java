@@ -14,6 +14,7 @@ public class DataProcessor {
     private DNAHashTable table;
     private MemoryManager manager;
 
+
     /**
      * Default constructor
      * 
@@ -26,6 +27,7 @@ public class DataProcessor {
         manager = new MemoryManager(memoryFile);
         this.table = table;
     }
+
 
     /**
      * Inserts a DNA sequence into the hash table and the memory manager
@@ -51,6 +53,7 @@ public class DataProcessor {
         }
     }
 
+
     /**
      * Removes a sequence with the given ID from the memory manager
      * 
@@ -64,9 +67,9 @@ public class DataProcessor {
         int destination = table.search(iD);
         DNARecord thisRecord = table.getHandleAtOffset(destination);
         int bucketStart = (destination / DNAHashTable.bucketSize)
-                * DNAHashTable.bucketSize;
+            * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
-                + DNAHashTable.bucketSize; i++) {
+            + DNAHashTable.bucketSize; i++) {
             thisRecord = table.getHandleAtOffset(i);
             if (thisRecord != null && thisRecord.getIDLength() >= 0
                     && iD.length() == thisRecord.getIDLength()
@@ -89,6 +92,7 @@ public class DataProcessor {
             System.out.println("SequenceID " + iD + " not found");
         }
     }
+
 
     /**
      * Prints a list of all sequence IDs in the database
@@ -115,11 +119,12 @@ public class DataProcessor {
         else {
             System.out.println("");
             for (int i = 0; i < blocks.size(); i++) {
-                System.out.println(
-                        "[Block " + (i + 1) + "] " + blocks.get(i).toString());
+                System.out.println("[Block " + (i + 1) + "] " + blocks.get(i)
+                    .toString());
             }
         }
     }
+
 
     /**
      * Prints out the sequence associated with the given ID, if there is one
@@ -132,17 +137,17 @@ public class DataProcessor {
     public void search(String iD) throws IOException {
         int destination = table.search(iD);
         boolean found = false;
-        int bucketStart = ((int) destination / DNAHashTable.bucketSize)
-                * DNAHashTable.bucketSize;
+        int bucketStart = ((int)destination / DNAHashTable.bucketSize)
+            * DNAHashTable.bucketSize;
         for (int i = bucketStart; i < bucketStart
-                + DNAHashTable.bucketSize; i++) {
-            DNARecord thisRecord = table.getTable()[i];
+            + DNAHashTable.bucketSize; i++) {
+            DNARecord thisRecord = table.getHandleAtOffset(i);
             if (thisRecord != null && thisRecord.getIDLength() >= 0
-                    && iD.equals(binaryToDNA(manager.getID(thisRecord),
-                            iD.length()))) {
+                && thisRecord.getIDLength() == iD.length() && iD.equals(
+                    binaryToDNA(manager.getID(thisRecord), iD.length()))) {
                 System.out.print("Sequence Found: ");
                 System.out.println(binaryToDNA(manager.getSequence(thisRecord),
-                        thisRecord.getSeqLength()));
+                    thisRecord.getSeqLength()));
                 found = true;
                 break;
             }
@@ -151,6 +156,7 @@ public class DataProcessor {
             System.out.println("SequenceID " + iD + " not found");
         }
     }
+
 
     /**
      * Returns the DNA string for a string of 0s and 1s
@@ -166,9 +172,8 @@ public class DataProcessor {
         int sequenceLength = length;
         for (int i = 0; i < bin.length; i++) {
             int minVal = Math.min(4, sequenceLength);
-            String binaryString = String
-                    .format("%8s", Integer.toBinaryString(bin[i] & 0xFF))
-                    .replace(' ', '0');
+            String binaryString = String.format("%8s", Integer.toBinaryString(
+                bin[i] & 0xFF)).replace(' ', '0');
             for (int j = 0; j < minVal; j++) {
                 int substringIndex = 2 + (j * 2);
                 if (substringIndex > (sequenceLength * 2)) {

@@ -1,4 +1,3 @@
-
 /**
  * Data type to represent the free spaces in memory.
  * 

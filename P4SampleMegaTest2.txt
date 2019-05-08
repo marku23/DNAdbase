@@ -1,0 +1,78 @@
+insert TAC 3
+TAC
+
+insert ATTAC 10
+ATTACATTAC
+
+insert ATC 9
+ATCATCATC
+
+insert GG 8
+GGGGGGGG
+
+insert GAT 6
+GATGAT
+
+insert CAT 9
+CATCATCAT
+
+insert TAG 6
+TAGTAG
+
+print
+
+remove ATTAC
+
+print
+
+insert CAG 9
+CAGCAGCAG
+
+print
+
+remove TAG
+search TAG
+
+print
+
+remove GG
+
+print 
+
+remove GAT
+
+print
+
+insert AA 24
+AAAAAAAAAAAAAAAAAAAAAAAA
+
+print
+
+remove AA
+
+print
+
+remove CAT
+
+print
+
+insert CAAAT 45
+CAAATCAAATCAAATCAAATCAAATCAAATCAAATCAAATCAAAT
+
+print
+
+remove CAAAT
+
+print
+
+remove TAG
+
+print
+
+search TAC
+search CAG
+search ATC
+search TAG
+search GG
+search GAT
+search CAAAT

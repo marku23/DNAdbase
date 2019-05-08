@@ -15,9 +15,10 @@ public class DNARecord {
     private int seqLength;
     
     // Constructors............................................................
-    
+
     /**
-     * Creates a DNARecord object 
+     * Creates a DNARecord object
+     * 
      * @param off1
      *      iDOffset
      * @param len1
@@ -34,59 +35,67 @@ public class DNARecord {
         iDLength = len1;
         seqLength = len2;
     }
-    
-    
+
+
     // Methods.................................................................
-    
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The offset of the SequenceID in the memory manager.
+     *         The offset of the SequenceID in the memory manager.
      */
-    
+
     public int getIDOffset() {
         return iDOffset;
     }
-    
-    
+
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The offset of the Sequence in the binary file.
+     *         The offset of the Sequence in the binary file.
      */
-    
+
     public int getSeqOffset() {
         return seqOffset;
     }
-    
-    
+
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The length of the SequenceID in the memory manager.
+     *         The length of the SequenceID in the memory manager.
      */
-    
+
     public int getIDLength() {
         return iDLength;
     }
-    
+
+
     /**
-     * Changes the IDLength of this DNARecord. This is used for setting 
+     * Changes the IDLength of this DNARecord. This is used for setting
      * our condition for a tombstone: if the ID length is negative, then this
      * is a tombstone.
-     * @param newLength - the new length of the ID of this sequence
+     * 
+     * @param newLength
+     *            - the new length of the ID of this sequence
      */
     public void setIDLength(int newLength)
     {
         iDLength = newLength;
     }
-    
+
+
     /**
-     * getter method. 
+     * getter method.
+     * 
      * @return
-     *      The length of the Sequence in the binary file.
+     *         The length of the Sequence in the binary file.
      */
-    
+
     public int getSeqLength() {
         return seqLength;
     }

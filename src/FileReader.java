@@ -27,8 +27,12 @@ public class FileReader {
      *            - the file we are hashing to
      * @param memoryFile
      *            - the file we are storing sequences in
+<<<<<<< HEAD
      * @param tableSize - the size of the hash table
      * @throws IOException 
+=======
+     * @throws IOException
+>>>>>>> 12f747769c24261ae898d3abb958d8110a389234
      */
     public FileReader(
         String inputFile,
@@ -52,27 +56,31 @@ public class FileReader {
      *             if the memory file was not found
      */
     public void processInput() throws IOException {
+        Scanner scan;
         while (reader.hasNext()) {
             String temp = reader.nextLine().trim();
-            String[] commands = temp.split("[ \t]");
-            if (commands[0].equals("insert")) {
-                String iD = commands[1];
-                String seq = reader.nextLine();
-                processor.insert(iD, seq);
-            }
-            else if (commands[0].equals("remove")) {
-                String iD = commands[1];
-                processor.remove(iD);
-            }
-            else if (commands[0].equals("print")) {
-                processor.print();
-            }
-            else if (commands[0].equals("search")) {
-                String iD = commands[1];
-                processor.search(iD);
-            }
-            else {
-                if (temp.length() != 0) {
+            scan = new Scanner(temp);
+            if (scan.hasNext()) {
+                String command = scan.next();
+               // String[] commands = temp.split("[ \t]");
+                if (command.equals("insert")) {
+                    String ID = scan.next();
+                    int size = Integer.parseInt(scan.next());
+                    String seq = reader.nextLine().substring(0, size);
+                    processor.insert(ID, seq);
+                }
+                else if (command.equals("remove")) {
+                    String ID = scan.next();
+                    processor.remove(ID);
+                }
+                else if (command.equals("print")) {
+                    processor.print();
+                }
+                else if (command.equals("search")) {
+                    String ID = scan.next();
+                    processor.search(ID);
+                }
+                else {
                     System.out.println("Command not recognized");
                 }
             }
